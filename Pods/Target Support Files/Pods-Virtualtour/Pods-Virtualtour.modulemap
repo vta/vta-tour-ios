@@ -1,0 +1,6 @@
+framework module Pods_Virtualtour {
+  umbrella header "Pods-Virtualtour-umbrella.h"
+
+  export *
+  module * { export * }
+}
