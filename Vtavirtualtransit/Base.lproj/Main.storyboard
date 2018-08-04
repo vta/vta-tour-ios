@@ -1237,7 +1237,7 @@
                     <navigationItem key="navigationItem" id="kbq-n5-JeC">
                         <nil key="title"/>
                         <view key="titleView" contentMode="scaleToFill" id="B9J-k0-OGa">
-                            <rect key="frame" x="53" y="2" width="215" height="40"/>
+                            <rect key="frame" x="52.5" y="2" width="215" height="40"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="8" translatesAutoresizingMaskIntoConstraints="NO" id="EC2-2H-V37">
@@ -1268,8 +1268,10 @@
                     </navigationItem>
                     <connections>
                         <outlet property="bottomBtnConstraint" destination="LlH-fJ-ZHs" id="C7N-RX-wak"/>
+                        <outlet property="btnMapSelection" destination="gFV-xx-cHc" id="AlT-L9-bR9"/>
                         <outlet property="btnPlayVideo" destination="pme-sZ-KZR" id="RGX-ji-gDl"/>
                         <outlet property="btnRestartVideo" destination="bka-mR-vDv" id="PxA-o5-wRs"/>
+                        <outlet property="btnSatelliteSelection" destination="fGF-8V-JaR" id="lAl-mt-GUt"/>
                         <outlet property="btnViewsSelection" destination="gyg-01-MoK" id="IJp-Y8-qKk"/>
                         <outlet property="containerView" destination="SbA-h8-hEW" id="byb-no-hPO"/>
                         <outlet property="lblDirectionHeightCons" destination="Jdn-vZ-jrb" id="Clr-G3-G7B"/>
@@ -1279,6 +1281,7 @@
                         <outlet property="lblRouteName" destination="EC2-2H-V37" id="GQv-SX-vss"/>
                         <outlet property="lblStationHeightCons" destination="z3O-ir-k4D" id="rtu-CU-qut"/>
                         <outlet property="routeMapView" destination="CJm-k8-Rea" id="u75-VC-iZU"/>
+                        <outlet property="stackView" destination="n9y-II-Pgc" id="7cm-ig-BAG"/>
                         <segue destination="c6c-ux-4Iu" kind="show" identifier="navigationSegue" id="kzk-Op-ahp"/>
                         <segue destination="Mug-FL-cq8" kind="show" identifier="show_pois" id="U8t-1h-IZW"/>
                     </connections>

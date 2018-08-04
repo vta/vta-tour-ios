@@ -19,7 +19,7 @@ import Reachability
 import SVProgressHUD
 
 
-class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDelegate, UNUserNotificationCenterDelegate
+class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDelegate, UNUserNotificationCenterDelegate, StopsMarkerDelegate
 {
     
     var ref: DatabaseReference!         // FIREBASE REFERENCE
@@ -60,6 +60,7 @@ class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDele
     var stopDirectionIndex: Int! = -1
     //var carUpdateIndex: Int!
     
+    @IBOutlet weak var stackView: UIStackView!
     
     var stopsMarker: GMSMarker?
     var carMarker: GMSMarker?
@@ -92,6 +93,10 @@ class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDele
     
     var amenitiesFieldsArr = [AmenitiesFields]()
     
+    @IBOutlet var btnMapSelection: UIButton!
+    @IBOutlet var btnSatelliteSelection: UIButton!
+    
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -115,6 +120,9 @@ class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDele
         self.getCustomePOI()
         lblDirectionHeightCons.constant = 0
         lblStationHeightCons.constant = 0
+        
+        self.perform(#selector(showRouteMapPOIMeetupBike), with: nil, afterDelay: 1.0)
+        
     }
     
     func loadNiB() -> StopsMarkerView {
@@ -153,6 +161,20 @@ class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDele
         // Dispose of any resources that can be recreated.
     }
     
+    @objc func showRouteMapPOIMeetupBike() {
+        
+        let poiGeoPoint = videoGeoPoints[0]
+        
+        let lat:String = String(format:"%f", poiGeoPoint.lat!)
+        let lng: String = String(format:"%f",poiGeoPoint.lng!)
+        let latLngStr = lat + "," + lng
+        
+        self.getPOIs(latLong: latLngStr, type: "bank")
+        self.getMeetUps(lat: lat, lon: lng)
+        self.getBikeIntegrationData(lat: lat, lon: lng)
+        self.showCustomPOIsOnPauseVideo()
+    }
+    
     //MARK: - POIs
     
     func getPOIs(latLong : String, type: String)
@@ -167,7 +189,9 @@ class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDele
                 self.poiDictResult = json as! NSDictionary
                 //  print(self.dictResult)
                 self.POIMarkerArr.removeAll()
-                self.showPOIsOnPauseVideo()
+                if !self.btnPlayVideo.isSelected {
+                    self.showPOIsOnPauseVideo()
+                }
             }
             else
             {
@@ -208,8 +232,9 @@ class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDele
         if marker.accessibilityValue == "stops"  && (marker.userData != nil) {
             stopsMarkerVw.removeFromSuperview()
             stopsMarkerVw = loadNiB()
+            stopsMarkerVw.delegate = self
             stopLocationMarker = marker
-            guard let location: CLLocationCoordinate2D = marker.position  else {
+            guard let location = stopLocationMarker?.position  else {
                 print("locationMarker is nil")
                 return false
             }
@@ -217,13 +242,15 @@ class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDele
             stopsMarkerVw.center = mapView.projection.point(for: location)
             
             if containerView.isHidden {
-                stopsMarkerVw.center.y =  routeMapView.center.y - 80
+                stopsMarkerVw.center.y =  stopsMarkerVw.center.y - 80
             }
             else {
-                stopsMarkerVw.center.y = stopsMarkerVw.center.y + routeMapView.center.y + routeMapView.y + 30
+                stopsMarkerVw.center.y = stopsMarkerVw.center.y - (stopsMarkerVw.frame.height) + 20
             }
             
-            self.view.addSubview(stopsMarkerVw)
+            routeMapView.addSubview(stopsMarkerVw)
+            btnMapSelection.isHidden = true
+            btnSatelliteSelection.isHidden = true
             
             let selectStops: Stops = marker.userData as! Stops
             
@@ -275,16 +302,25 @@ class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDele
         if (stopLocationMarker != nil){
             guard let location = stopLocationMarker?.position else {
                 print("locationMarker is nil")
+                btnMapSelection.isHidden = false
+                btnSatelliteSelection.isHidden = false
                 return
             }
             stopsMarkerVw.center = routeMapView.projection.point(for: location)
             if containerView.isHidden {
-                stopsMarkerVw.center.y =  routeMapView.center.y - 80
+                stopsMarkerVw.center.y =  stopsMarkerVw.center.y - 80
             }
             else {
-                stopsMarkerVw.center.y = stopsMarkerVw.center.y + routeMapView.center.y + routeMapView.y + 30
+                stopsMarkerVw.center.y = stopsMarkerVw.center.y - (stopsMarkerVw.frame.height) + 20
             }
         }
+    }
+    
+    //MARK: - Stops Marker Delegate
+    func dismissStopsMarkerView() {
+        stopsMarkerVw.removeFromSuperview()
+        btnMapSelection.isHidden = false
+        btnSatelliteSelection.isHidden = false
     }
 
     
@@ -556,10 +592,10 @@ class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDele
                         
                         self?.playerManager.seekToTime(Int((self.self?.playerManager.playerView.startTimeValue)!))
                         
-                        self.self?.btnPlayVideo.accessibilityValue = "1"
-                        self?.playerManager.play()
-                        self?.btnPlayVideo.isSelected = true
-                        self?.lblPlayVideo.text = "Pause"
+                        self?.btnPlayVideo.accessibilityValue = "0"
+                        self?.playerManager.pause()
+                        self?.btnPlayVideo.isSelected = false
+                        self?.lblPlayVideo.text = "PLAY"
                         self?.btnPlayVideo.isEnabled = true
                     }
                     
@@ -630,7 +666,7 @@ class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDele
             
             // print(self.videoGeoPointsArr.count)
             SVProgressHUD.dismiss()
-            
+            self.playerManager.pause()
             DispatchQueue.main.async {
                 self.drawRouteLine()
                 self.playerManager.playUrlStr = self.videoPlayURL! as String?
@@ -642,11 +678,12 @@ class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDele
                 
                 self.playerManager.seekToTime(Int((self.self.playerManager.playerView.startTimeValue)!))
                 
-                self.self.btnPlayVideo.accessibilityValue = "1"
-                self.playerManager.play()
-                self.btnPlayVideo.isSelected = true
-                self.lblPlayVideo.text = "Pause"
+                self.btnPlayVideo.accessibilityValue = "0"
+                self.playerManager.pause()
+                self.btnPlayVideo.isSelected = false
+                self.lblPlayVideo.text = "PLAY"
                 self.btnPlayVideo.isEnabled = true
+
             }
         })
     }
@@ -724,7 +761,8 @@ class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDele
         print("Coordinate ===> ===\(coordinate.latitude)     ====Long ===> \(coordinate.longitude)")
         stopsMarkerVw.removeFromSuperview()
         self.findClosestDistance(lat: coordinate.latitude, lon: coordinate.longitude)
-        
+        btnMapSelection.isHidden = false
+        btnSatelliteSelection.isHidden = false
     }
     
     @IBAction func restartVideo(_ sender: UIButton)

@@ -144,7 +144,13 @@ class PlayerView: UIView, UIGestureRecognizerDelegate {
         
         // 底部进度条view
         toolBarView = UIView(frame: CGRect(x: 0, y: coverView.height-toolBarViewH, width: coverView.width, height: toolBarViewH))
-        toolBarView.backgroundColor = RGB_COLOR(0, g: 0, b: 0, alpha: 0.6)
+     //   toolBarView.backgroundColor = RGB_COLOR(0, g: 0, b: 0, alpha: 0.6)
+        
+        let gradient = CAGradientLayer()
+        gradient.frame = toolBarView.bounds
+        gradient.colors = [UIColor.clear.cgColor, UIColor.black.withAlphaComponent(0.6).cgColor]
+        toolBarView.layer.addSublayer(gradient)
+        
         coverView.addSubview(toolBarView)
         
         // 菊花转
@@ -227,6 +233,7 @@ class PlayerView: UIView, UIGestureRecognizerDelegate {
     
     // 进度缓冲条
     private func makeProgress() {
+        
         
         toolBarView.addSubview(progressView)
         let progressX = leftTimeLabel.right + Padding
