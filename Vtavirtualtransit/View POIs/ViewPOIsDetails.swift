@@ -9,8 +9,9 @@
 import UIKit
 import Alamofire
 import SDWebImage
+import GoogleMaps
 
-class ViewPOIsDetails: UIViewController
+class ViewPOIsDetails: UIViewController, GMSMapViewDelegate
 {
     @IBOutlet var imgMain: UIImageView!
     @IBOutlet var btnWalk: UIButton!
@@ -29,6 +30,8 @@ class ViewPOIsDetails: UIViewController
     var destinationLat_Lon: String!
     var dictDetails = NSMutableDictionary()
     
+    @IBOutlet weak var poiRouteMap: GMSMapView!
+    
     override func viewDidLoad()
     {
         super.viewDidLoad()
@@ -44,6 +47,7 @@ class ViewPOIsDetails: UIViewController
         sourceLat_Lon = dictDetails.value(forKey: "lat_lon") as? String
         
         getPlaceDetails(placeID: strPlaceID!)
+        
     }
     
     func getPlaceDetails(placeID : String)
@@ -78,6 +82,9 @@ class ViewPOIsDetails: UIViewController
                     let lng = data.value(forKeyPath: "result.geometry.location.lng") as! NSNumber
                     
                     self.destinationLat_Lon = String(format:"%f", lat.doubleValue) + "," + String(format:"%f", lng.doubleValue)
+                    
+                    self.setupPOIsMarker(poiLocation: CLLocation(latitude: lat.doubleValue, longitude: lng.doubleValue))
+                    self.setupGoogleMapView(poiLocation: CLLocation(latitude: lat.doubleValue, longitude: lng.doubleValue))
                 }
                 
                 
@@ -157,6 +164,48 @@ class ViewPOIsDetails: UIViewController
         }
     }
     
+    func setupPOIsMarker(poiLocation: CLLocation)
+    {
+        let position = CLLocationCoordinate2D(latitude: poiLocation.coordinate.latitude, longitude: poiLocation.coordinate.longitude)
+        let marker = GMSMarker(position: position)
+        marker.tracksViewChanges = true
+        marker.map = self.poiRouteMap
+        marker.isTappable =  true
+        marker.zIndex = 1
+        
+    }
+    
+    func setupGoogleMapView(poiLocation: CLLocation)
+    {
+        //Set up Google Map
+        
+        let camera = GMSCameraPosition.camera(withLatitude: poiLocation.coordinate.latitude ,
+                                              longitude: poiLocation.coordinate.longitude,
+                                              zoom: 13.0)
+        poiRouteMap.camera = camera
+        poiRouteMap.mapType = .normal
+        poiRouteMap.delegate = self
+        poiRouteMap.settings.compassButton = true
+        
+        let path = GMSMutablePath()
+        
+        path.add(CLLocationCoordinate2DMake(poiLocation.coordinate.latitude, poiLocation.coordinate.longitude))
+        path.add(CLLocationCoordinate2DMake(poiLocation.coordinate.latitude, poiLocation.coordinate.longitude))
+        
+//        let bounds = GMSCoordinateBounds(path: path)
+//        poiRouteMap!.animate(with: GMSCameraUpdate.fit(bounds, withPadding: 50.0))
+    }
+    
+    @IBAction func onZoomInOutBtn(_ sender: UIButton)
+    {
+        let zoom = poiRouteMap.camera.zoom
+        if sender.tag == 70 {   // On Zoom In
+            poiRouteMap.animate(toZoom: zoom + 1)
+        }
+        else if sender.tag == 71 {  // On Zoom out
+            poiRouteMap.animate(toZoom: zoom - 1)
+        }
+    }
     /*
      // MARK: - Navigation
      

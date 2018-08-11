@@ -195,14 +195,14 @@ class ShowNearMeVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     {
         SVProgressHUD.show()
 
-        let strURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latLong + "&rankby=distance&type=" + type + "&key=\(API_KEY.GetPOI)"
+        let strURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latLong + "&radius=500&type=" + type + "&key=\(API_KEY.GetPOI)"
         
         Alamofire.request(strURL,method: .get, parameters: nil, encoding: URLEncoding.default, headers:nil) .responseJSON { response in
             
             let header = (response.response?.allHeaderFields)! as NSDictionary
             
-            print(header)
-            print(response)
+            print(response.request)
+            //print(response)
             
             if let json = response.result.value
             {
@@ -266,7 +266,7 @@ class ShowNearMeVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     
     func loadPoiCategory(latLong : String, type: String) {
         SVProgressHUD.show()
-        let strURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latLong + "&rankby=distance&type=" + type + "&key=\(API_KEY.GetPOI)"
+        let strURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latLong + "&radius=500&type=" + type + "&key=\(API_KEY.GetPOI)"
         
         Alamofire.request(strURL,method: .get, parameters: nil, encoding: URLEncoding.default, headers:nil) .responseJSON { response in
             

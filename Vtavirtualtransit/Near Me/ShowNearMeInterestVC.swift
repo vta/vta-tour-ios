@@ -184,6 +184,15 @@ class ShowNearMeInterestVC: UIViewController, UITableViewDataSource, UITableView
                     })
                 }
             }
+            else if type == "Custom POI" {
+                
+                let dictDetails = arrData[indexPath.row] as NSDictionary
+                if let connection = dictDetails.value(forKey: "web_link") {
+                    
+                    UIApplication.shared.open(URL(string : connection as! String)!, options: [:], completionHandler: { (status) in
+                    })
+                }
+            }
         }
         else if cellType == "label" {
             if type == "Connections" {
@@ -195,7 +204,6 @@ class ShowNearMeInterestVC: UIViewController, UITableViewDataSource, UITableView
                     UIApplication.shared.open(URL(string : connectionURL)!, options: [:], completionHandler: { (status) in
                     })
                 }
-                
             }
         }
     }
@@ -363,11 +371,11 @@ class ShowNearMeInterestVC: UIViewController, UITableViewDataSource, UITableView
                         
                         let decodedimage:UIImage = UIImage(data: dataDecoded as Data)!
                         
-                        let dict : [String:Any] = ["title": customPOIs.name ?? "", "subTitle": customPOIs.address ?? "", "image": decodedimage]
+                        let dict : [String:Any] = ["title": customPOIs.name ?? "", "subTitle": customPOIs.address ?? "", "image": decodedimage, "web_link": customPOIs.web_link ?? ""]
                         self.arrData.append(dict)
                     }
                     else {
-                        let dict : [String:Any] = ["title": customPOIs.name ?? "", "subTitle": customPOIs.address ?? "", "image": ""]
+                        let dict : [String:Any] = ["title": customPOIs.name ?? "", "subTitle": customPOIs.address ?? "", "image": "", "web_link": customPOIs.web_link ?? ""]
                         self.arrData.append(dict)
                     }
                 }
@@ -378,13 +386,13 @@ class ShowNearMeInterestVC: UIViewController, UITableViewDataSource, UITableView
     
     func loadPoi(latLong : String, type: String) {
         
-        let strURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latLong + "&rankby=distance&type=" + type + "&key=\(API_KEY.GetPOI)"
+        let strURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latLong + "&radius=500&type=" + type + "&key=\(API_KEY.GetPOI)"
         
         Alamofire.request(strURL,method: .get, parameters: nil, encoding: URLEncoding.default, headers:nil) .responseJSON { response in
             
             let header = (response.response?.allHeaderFields)! as NSDictionary
             
-            print(header)
+            print(response.request)
             print(response)
             
             if let json = response.result.value
