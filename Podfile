@@ -15,4 +15,5 @@ pod 'GoogleMaps'
 pod 'GooglePlaces'
 pod 'Alamofire', '~> 4.7'
 pod 'ReachabilitySwift'
+pod 'GeoFire'
 end

@@ -1237,7 +1237,7 @@
                     <navigationItem key="navigationItem" id="kbq-n5-JeC">
                         <nil key="title"/>
                         <view key="titleView" contentMode="scaleToFill" id="B9J-k0-OGa">
-                            <rect key="frame" x="52.5" y="2" width="215" height="40"/>
+                            <rect key="frame" x="53" y="2" width="215" height="40"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="8" translatesAutoresizingMaskIntoConstraints="NO" id="EC2-2H-V37">

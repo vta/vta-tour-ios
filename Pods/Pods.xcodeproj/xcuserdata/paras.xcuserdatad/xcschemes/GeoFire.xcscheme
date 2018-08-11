@@ -14,9 +14,9 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "3EDF8C67704F7A40BAD018B636AA32DB"
-               BuildableName = "SDWebImage.framework"
-               BlueprintName = "SDWebImage"
+               BlueprintIdentifier = "BAD895DDD6062D854B8FA4312038C68F"
+               BuildableName = "GeoFire.framework"
+               BlueprintName = "GeoFire"
                ReferencedContainer = "container:Pods.xcodeproj">
             </BuildableReference>
          </BuildActionEntry>
@@ -45,9 +45,9 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "3EDF8C67704F7A40BAD018B636AA32DB"
-            BuildableName = "SDWebImage.framework"
-            BlueprintName = "SDWebImage"
+            BlueprintIdentifier = "BAD895DDD6062D854B8FA4312038C68F"
+            BuildableName = "GeoFire.framework"
+            BlueprintName = "GeoFire"
             ReferencedContainer = "container:Pods.xcodeproj">
          </BuildableReference>
       </MacroExpansion>

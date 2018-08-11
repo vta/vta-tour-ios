@@ -167,9 +167,9 @@ class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDele
         
         let lat:String = String(format:"%f", poiGeoPoint.lat!)
         let lng: String = String(format:"%f",poiGeoPoint.lng!)
-        let latLngStr = lat + "," + lng
+        //let latLngStr = lat + "," + lng
         
-        self.getPOIs(latLong: latLngStr, type: "bank")
+      //  self.getPOIs(latLong: latLngStr, type: "bank")
         self.getMeetUps(lat: lat, lon: lng)
         self.getBikeIntegrationData(lat: lat, lon: lng)
         self.showCustomPOIsOnPauseVideo()
@@ -177,33 +177,33 @@ class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDele
     
     //MARK: - POIs
     
-    func getPOIs(latLong : String, type: String)
-    {
-        let strURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latLong + "&rankby=distance&type=" + type + "&key=\(API_KEY.GetPOI)"
-        
-        Alamofire.request(strURL,method: .get, parameters: nil, encoding: URLEncoding.default, headers:nil) .responseJSON { response in
-            
-            
-            if let json = response.result.value
-            {
-                self.poiDictResult = json as! NSDictionary
-                //  print(self.dictResult)
-                self.POIMarkerArr.removeAll()
-                if !self.btnPlayVideo.isSelected {
-                    self.showPOIsOnPauseVideo()
-                }
-            }
-            else
-            {
-                //  print(response)
-                
-                let alertController = UIAlertController(title: "Virtualtour", message: "Could not connect to the server.\n Please try again." as String, preferredStyle: .alert)
-                let okAction = UIAlertAction(title: "Ok", style: .cancel, handler: { action in})
-                alertController.addAction(okAction)
-                self.present(alertController, animated: true, completion: nil)
-            }
-        }
-    }
+//    func getPOIs(latLong : String, type: String)
+//    {
+//        let strURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latLong + "&rankby=distance&type=" + type + "&key=\(API_KEY.GetPOI)"
+//
+//        Alamofire.request(strURL,method: .get, parameters: nil, encoding: URLEncoding.default, headers:nil) .responseJSON { response in
+//
+//
+//            if let json = response.result.value
+//            {
+//                self.poiDictResult = json as! NSDictionary
+//                //  print(self.dictResult)
+//                self.POIMarkerArr.removeAll()
+//                if !self.btnPlayVideo.isSelected {
+//                    self.showPOIsOnPauseVideo()
+//                }
+//            }
+//            else
+//            {
+//                //  print(response)
+//
+//                let alertController = UIAlertController(title: "Virtualtour", message: "Could not connect to the server.\n Please try again." as String, preferredStyle: .alert)
+//                let okAction = UIAlertAction(title: "Ok", style: .cancel, handler: { action in})
+//                alertController.addAction(okAction)
+//                self.present(alertController, animated: true, completion: nil)
+//            }
+//        }
+//    }
     
     //MARK:- SHOW ANIMATIES
     
@@ -316,6 +316,19 @@ class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDele
         }
     }
     
+    
+    func mapView(_ mapView: GMSMapView, didTapInfoWindowOf marker: GMSMarker) {
+        print("Tap Info window")
+        
+        if marker.accessibilityValue == "meetup" {
+            
+            if let meetupURL = marker.userData {
+                UIApplication.shared.open(URL(string : meetupURL as! String)!, options: [:], completionHandler: { (status) in
+                })
+            }
+        }
+    }
+    
     //MARK: - Stops Marker Delegate
     func dismissStopsMarkerView() {
         stopsMarkerVw.removeFromSuperview()
@@ -355,31 +368,31 @@ class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDele
     
     
     
-    func showPOIsOnPauseVideo()
-    {
-        if (poiDictResult != nil && poiDictResult.count > 0)
-        {
-            let resultArr = poiDictResult.value(forKey: "results") as! NSArray
-            
-            for dict in resultArr {
-                
-                let strLat = (dict as! NSDictionary).value(forKeyPath: "geometry.location.lat") as! NSNumber
-                
-                let strLng = (dict as! NSDictionary).value(forKeyPath: "geometry.location.lng") as! NSNumber
-                
-                
-                let strName = (dict as! NSDictionary).value(forKey: "name") as! String
-                
-                let position = CLLocationCoordinate2D(latitude: strLat.doubleValue, longitude: strLng.doubleValue)
-                let marker = GMSMarker(position: position)
-                marker.title = strName
-                marker.iconView = UIImageView.init(image: #imageLiteral(resourceName: "ic_vpois"))
-                marker.tracksViewChanges = true
-                marker.map = routeMapView
-                POIMarkerArr.append(marker)
-            }
-        }
-    }
+//    func showPOIsOnPauseVideo()
+//    {
+//        if (poiDictResult != nil && poiDictResult.count > 0)
+//        {
+//            let resultArr = poiDictResult.value(forKey: "results") as! NSArray
+//
+//            for dict in resultArr {
+//
+//                let strLat = (dict as! NSDictionary).value(forKeyPath: "geometry.location.lat") as! NSNumber
+//
+//                let strLng = (dict as! NSDictionary).value(forKeyPath: "geometry.location.lng") as! NSNumber
+//
+//
+//                let strName = (dict as! NSDictionary).value(forKey: "name") as! String
+//
+//                let position = CLLocationCoordinate2D(latitude: strLat.doubleValue, longitude: strLng.doubleValue)
+//                let marker = GMSMarker(position: position)
+//                marker.title = strName
+//                marker.iconView = UIImageView.init(image: #imageLiteral(resourceName: "ic_vpois"))
+//                marker.tracksViewChanges = true
+//                marker.map = routeMapView
+//                POIMarkerArr.append(marker)
+//            }
+//        }
+//    }
     
     func showMeetUpOnPauseVideo() {
         
@@ -404,6 +417,8 @@ class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDele
                 marker.snippet = "Members: \(member)"
                 marker.tracksViewChanges = true
                 marker.map = routeMapView
+                marker.userData = (dict as! NSDictionary).value(forKey: "link") as! String
+                marker.accessibilityValue = "meetup"
                 meetUpMarkerArr.append(marker)
             }
         }
@@ -804,7 +819,7 @@ class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDele
             let latLngStr = lat + "," + lng
             
             
-            self.getPOIs(latLong: latLngStr, type: "bank")
+           // self.getPOIs(latLong: latLngStr, type: "bank")
             self.getMeetUps(lat: lat, lon: lng)
             self.getBikeIntegrationData(lat: lat, lon: lng)
             self.showCustomPOIsOnPauseVideo()

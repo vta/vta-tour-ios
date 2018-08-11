@@ -32,6 +32,8 @@ class ShowNearMeInterestVC: UIViewController, UITableViewDataSource, UITableView
         tbleVwShowData.rowHeight = UITableViewAutomaticDimension
         tbleVwShowData.estimatedRowHeight = 100
         
+        self.title = type
+        
         self.getPoiInfo()
     }
     
@@ -173,6 +175,29 @@ class ShowNearMeInterestVC: UIViewController, UITableViewDataSource, UITableView
             
             self.performSegue(withIdentifier: "showNearMePOIDetailSegue", sender: dictNew)
         }
+        else if cellType == "image" {
+            
+            if type == "Social Gathering" {
+                let dictDetails = arrData[indexPath.row] as NSDictionary
+                if let meetupURL = dictDetails.value(forKey: "meetupURL") {
+                    UIApplication.shared.open(URL(string : meetupURL as! String)!, options: [:], completionHandler: { (status) in
+                    })
+                }
+            }
+        }
+        else if cellType == "label" {
+            if type == "Connections" {
+                
+                let dictDetails = arrData[indexPath.row] as NSDictionary
+                if let connection = dictDetails.value(forKey: "title") {
+                    
+                    let connectionURL = "http://www.vta.org/routes/rt\(connection)"
+                    UIApplication.shared.open(URL(string : connectionURL)!, options: [:], completionHandler: { (status) in
+                    })
+                }
+                
+            }
+        }
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
@@ -286,8 +311,9 @@ class ShowNearMeInterestVC: UIViewController, UITableViewDataSource, UITableView
                     for dict in resultArr {
                         
                         let strName = (dict as! NSDictionary).value(forKey: "name") as! String
+                        let meetupURL = (dict as! NSDictionary).value(forKey: "link") as! String
                         let member = (dict as! NSDictionary).value(forKey: "members") as! Int
-                        let dict : [String:Any] = ["title": strName, "subTitle": "Member: \(member)", "image": #imageLiteral(resourceName: "ic_meetup_poi")]
+                        let dict : [String:Any] = ["title": strName, "meetupURL" : meetupURL, "subTitle": "Member: \(member)", "image": #imageLiteral(resourceName: "ic_meetup_poi")]
                         self.arrData.append(dict)
                     }
                     self.tbleVwShowData.reloadData()

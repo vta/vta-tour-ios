@@ -14,6 +14,9 @@ import SVProgressHUD
 import MapViewPlus
 import CoreLocation
 import Reachability
+import GeoFire
+
+
 
 class ViewController: UIViewController , UITextFieldDelegate, CLLocationManagerDelegate {
     
@@ -80,7 +83,7 @@ class ViewController: UIViewController , UITextFieldDelegate, CLLocationManagerD
         super.viewDidLoad()
         
         ReachabilityManager.shared.addListener(listener: self)
-
+        
         
         self.setupDefaultDropDown()
         
@@ -552,11 +555,11 @@ class ViewController: UIViewController , UITextFieldDelegate, CLLocationManagerD
     
     func getRoutesDetailFromFireBase(isUserLocation: Bool)
     {
+        self.mainRoutesArr.removeAll()
         ref.child("routes").observeSingleEvent(of: DataEventType.value, with: { (snapshot) in
             
             var tempRouteArr = [Routes]()
             if snapshot.childrenCount > 0 {
-                self.mainRoutesArr.removeAll()
                 
                 for routes in snapshot.children.allObjects as! [DataSnapshot] {
                     //getting values
@@ -581,36 +584,91 @@ class ViewController: UIViewController , UITextFieldDelegate, CLLocationManagerD
             
             if isUserLocation && self.isNearBy {
                 
-                tempRouteArr = tempRouteArr.sorted(by: { (s1, s2) -> Bool in
-                    (s1.location?.distance(from: self.locationManager.location!))! < (s2.location?.distance(from: self.locationManager.location!))!
-                })
+                let geofireRef = Database.database().reference().child("stops")
+                let geoFire = GeoFire(firebaseRef: geofireRef)
                 
-                self.mainRoutesArr = Array(tempRouteArr[0..<4])
-                if self.mainRoutesArr.count == 0 {
-                    
-                    let alertController = UIAlertController(title: "Alert", message: "No nearest route available", preferredStyle: .alert)
-                    
-                    let dismiss = UIAlertAction(title: "Dismiss", style: .default) { (action:UIAlertAction) in
-                        self.getRoutesDetailFromFireBase(isUserLocation: false)
+                let circleQuery = geoFire.query(at: self.locationManager.location!, withRadius: 0.6)
+                
+                var arrNearMeStops = [Stops]()
+                DispatchQueue.main.async {
+                    SVProgressHUD.show()
+                    circleQuery.observe(.keyEntered, with: { (key: String!, location: CLLocation!, snapshot: DataSnapshot) in
+                        print("Key '\(key)' entered the search area and is at location '\(location)'")
+                        if snapshot.childrenCount > 0 {
+                            
+                            guard let stopObj = snapshot.value as? [String:Any] else {
+                                print("Error")
+                                return
+                            }
+                            let stopsCode  = stopObj["code"]
+                            let stopsLat  = stopObj["lat"]
+                            let stopsLng = stopObj["lng"]
+                            let stopsName = stopObj["name"]
+                            let stopsRoute_list = stopObj["route_list"]
+                            let stopsSec = stopObj["sec"]
+                            let stopCode = stopObj["stop_code"]
+                            
+                            let stopsObj = Stops(code: stopsCode as? String, lat: stopsLat as? Double, lng: stopsLng as? Double, name: stopsName as? String, route_list: stopsRoute_list as? String, sec: stopsSec as? Int, stop_code: stopCode as? String)
+                            
+                            arrNearMeStops.append(stopsObj)
+                        }
+                    })
+                }
+                
+                circleQuery.observeReady {
+                    DispatchQueue.main.async {
+                        SVProgressHUD.dismiss()
+                        print("Observe Ready....\(arrNearMeStops)")
+                        
+                        let routeList = arrNearMeStops.map({ $0.route_list?.components(separatedBy: ",")})
+                        print("Total Route List ===\(routeList)")
+                        var typesArr = [String]()
+                        for innerArr in routeList {
+                            for typeStr in (innerArr! as NSArray) {
+                                if !typesArr.contains(typeStr as! String) {
+                                    typesArr.append(typeStr as! String)
+                                }
+                            }
+                        }
+                        print("Final Nearest Rout ===\(typesArr)")
+                        tempRouteArr =  tempRouteArr.filter { typesArr.contains($0.code!) }
+                        
+                        self.mainRoutesArr = Array(tempRouteArr[0..<tempRouteArr.count])
+                        self.routesNameArr = self.mainRoutesArr.map{$0.name} as! [NSString]
+                        
+                        SVProgressHUD.dismiss()
+                        self.setupRoutesDropDown(routes: self.routesNameArr as [String])
+                        
+                        self.txtNearByRoutes.isEnabled = true
+
+                        if self.mainRoutesArr.count == 0 {
+                            
+                            let alertController = UIAlertController(title: "Alert", message: "No nearest route available", preferredStyle: .alert)
+                            
+                            let dismiss = UIAlertAction(title: "Dismiss", style: .default) { (action:UIAlertAction) in
+                                self.getRoutesDetailFromFireBase(isUserLocation: false)
+                            }
+                            alertController.addAction(dismiss)
+                            self.present(alertController, animated: true, completion: nil)
+                            
+                            self.selectViewRoute = nil
+                            self.routesDestinationArr.removeAll()
+                            self.routesDepartureArr.removeAll()
+                            self.routesDirectionArr.removeAll()
+                            
+                            self.txtDeparture.text = ""
+                            self.txtRoutes.text = ""
+                            self.txtDirection.text = ""
+                            self.txtDestination.text = ""
+                            self.txtNearByRoutes.isEnabled = false
+                            
+                            self.departureIndex = -1
+                            self.destinationIndex = -1
+                            self.directionIndex = -1
+                            
+                            return
+                        }
                     }
-                    alertController.addAction(dismiss)
-                    self.present(alertController, animated: true, completion: nil)
-                    
-                    self.selectViewRoute = nil
-                    self.routesDestinationArr.removeAll()
-                    self.routesDepartureArr.removeAll()
-                    self.routesDirectionArr.removeAll()
-                    
-                    self.txtDeparture.text = ""
-                    self.txtRoutes.text = ""
-                    self.txtDirection.text = ""
-                    self.txtDestination.text = ""
-                    
-                    self.departureIndex = -1
-                    self.destinationIndex = -1
-                    self.directionIndex = -1
-                    
-                    return
                 }
             }
             else {
@@ -625,6 +683,12 @@ class ViewController: UIViewController , UITextFieldDelegate, CLLocationManagerD
             self.dropDowns.forEach { $0.dismissMode = .onTap }
             self.dropDowns.forEach { $0.direction = .any }
         }, withCancel: nil)
+    }
+    
+    
+    func fetch_NearMeRoute_According_stopsCode() {
+        
+        
     }
     
     
@@ -967,6 +1031,18 @@ class ViewController: UIViewController , UITextFieldDelegate, CLLocationManagerD
             arrNearMeStops = Array(stops[0..<3])
         }
     }
+    
+    // TEST
+    
+    //    func findNearestStopsTest() {
+    //
+    //
+    //        ref.child("stops").observe(DataEventType.childAdded) { (snapshot) in
+    //
+    //
+    //            print("SnapSHot ----\(snapshot.childrenCount)")
+    //        }
+    //    }
     
 }
 

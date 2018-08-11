@@ -78,6 +78,12 @@ class ShowNearMeVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         super.viewWillAppear(animated)
         self.navigationController?.navigationBar.isHidden = false
         self.navigationController?.navigationBar.isTranslucent = false
+        self.title = selectStops.name
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        self.title = ""
     }
     
     override func didReceiveMemoryWarning() {
