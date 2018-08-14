@@ -199,9 +199,9 @@ class ShowNearMeVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         
         Alamofire.request(strURL,method: .get, parameters: nil, encoding: URLEncoding.default, headers:nil) .responseJSON { response in
             
-            let header = (response.response?.allHeaderFields)! as NSDictionary
+           // let header = (response.response?.allHeaderFields)! as NSDictionary
             
-            print(response.request)
+          //  print(response.request)
             //print(response)
             
             if let json = response.result.value

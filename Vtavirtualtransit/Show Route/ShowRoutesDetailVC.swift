@@ -129,7 +129,7 @@ class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDele
         let infoWindow = StopsMarkerView.instanceFromNib() as! StopsMarkerView
         return infoWindow
     }
-
+    
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -169,7 +169,7 @@ class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDele
         let lng: String = String(format:"%f",poiGeoPoint.lng!)
         //let latLngStr = lat + "," + lng
         
-      //  self.getPOIs(latLong: latLngStr, type: "bank")
+        //  self.getPOIs(latLong: latLngStr, type: "bank")
         self.getMeetUps(lat: lat, lon: lng)
         self.getBikeIntegrationData(lat: lat, lon: lng)
         self.showCustomPOIsOnPauseVideo()
@@ -177,33 +177,33 @@ class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDele
     
     //MARK: - POIs
     
-//    func getPOIs(latLong : String, type: String)
-//    {
-//        let strURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latLong + "&rankby=distance&type=" + type + "&key=\(API_KEY.GetPOI)"
-//
-//        Alamofire.request(strURL,method: .get, parameters: nil, encoding: URLEncoding.default, headers:nil) .responseJSON { response in
-//
-//
-//            if let json = response.result.value
-//            {
-//                self.poiDictResult = json as! NSDictionary
-//                //  print(self.dictResult)
-//                self.POIMarkerArr.removeAll()
-//                if !self.btnPlayVideo.isSelected {
-//                    self.showPOIsOnPauseVideo()
-//                }
-//            }
-//            else
-//            {
-//                //  print(response)
-//
-//                let alertController = UIAlertController(title: "Virtualtour", message: "Could not connect to the server.\n Please try again." as String, preferredStyle: .alert)
-//                let okAction = UIAlertAction(title: "Ok", style: .cancel, handler: { action in})
-//                alertController.addAction(okAction)
-//                self.present(alertController, animated: true, completion: nil)
-//            }
-//        }
-//    }
+    //    func getPOIs(latLong : String, type: String)
+    //    {
+    //        let strURL = "https://maps.googleapis.com/maps/api/place/nearbysearch/json?location=" + latLong + "&rankby=distance&type=" + type + "&key=\(API_KEY.GetPOI)"
+    //
+    //        Alamofire.request(strURL,method: .get, parameters: nil, encoding: URLEncoding.default, headers:nil) .responseJSON { response in
+    //
+    //
+    //            if let json = response.result.value
+    //            {
+    //                self.poiDictResult = json as! NSDictionary
+    //                //  print(self.dictResult)
+    //                self.POIMarkerArr.removeAll()
+    //                if !self.btnPlayVideo.isSelected {
+    //                    self.showPOIsOnPauseVideo()
+    //                }
+    //            }
+    //            else
+    //            {
+    //                //  print(response)
+    //
+    //                let alertController = UIAlertController(title: "Virtualtour", message: "Could not connect to the server.\n Please try again." as String, preferredStyle: .alert)
+    //                let okAction = UIAlertAction(title: "Ok", style: .cancel, handler: { action in})
+    //                alertController.addAction(okAction)
+    //                self.present(alertController, animated: true, completion: nil)
+    //            }
+    //        }
+    //    }
     
     //MARK:- SHOW ANIMATIES
     
@@ -335,7 +335,7 @@ class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDele
         btnMapSelection.isHidden = false
         btnSatelliteSelection.isHidden = false
     }
-
+    
     
     // MARK:- MEETUP
     func getMeetUps(lat : String, lon: String)
@@ -368,31 +368,31 @@ class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDele
     
     
     
-//    func showPOIsOnPauseVideo()
-//    {
-//        if (poiDictResult != nil && poiDictResult.count > 0)
-//        {
-//            let resultArr = poiDictResult.value(forKey: "results") as! NSArray
-//
-//            for dict in resultArr {
-//
-//                let strLat = (dict as! NSDictionary).value(forKeyPath: "geometry.location.lat") as! NSNumber
-//
-//                let strLng = (dict as! NSDictionary).value(forKeyPath: "geometry.location.lng") as! NSNumber
-//
-//
-//                let strName = (dict as! NSDictionary).value(forKey: "name") as! String
-//
-//                let position = CLLocationCoordinate2D(latitude: strLat.doubleValue, longitude: strLng.doubleValue)
-//                let marker = GMSMarker(position: position)
-//                marker.title = strName
-//                marker.iconView = UIImageView.init(image: #imageLiteral(resourceName: "ic_vpois"))
-//                marker.tracksViewChanges = true
-//                marker.map = routeMapView
-//                POIMarkerArr.append(marker)
-//            }
-//        }
-//    }
+    //    func showPOIsOnPauseVideo()
+    //    {
+    //        if (poiDictResult != nil && poiDictResult.count > 0)
+    //        {
+    //            let resultArr = poiDictResult.value(forKey: "results") as! NSArray
+    //
+    //            for dict in resultArr {
+    //
+    //                let strLat = (dict as! NSDictionary).value(forKeyPath: "geometry.location.lat") as! NSNumber
+    //
+    //                let strLng = (dict as! NSDictionary).value(forKeyPath: "geometry.location.lng") as! NSNumber
+    //
+    //
+    //                let strName = (dict as! NSDictionary).value(forKey: "name") as! String
+    //
+    //                let position = CLLocationCoordinate2D(latitude: strLat.doubleValue, longitude: strLng.doubleValue)
+    //                let marker = GMSMarker(position: position)
+    //                marker.title = strName
+    //                marker.iconView = UIImageView.init(image: #imageLiteral(resourceName: "ic_vpois"))
+    //                marker.tracksViewChanges = true
+    //                marker.map = routeMapView
+    //                POIMarkerArr.append(marker)
+    //            }
+    //        }
+    //    }
     
     func showMeetUpOnPauseVideo() {
         
@@ -428,7 +428,7 @@ class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDele
     // MARK:- GET BIKE ON VIDEO
     func getBikeIntegrationData(lat : String, lon: String)
     {
-        let bikeURL = "https://api.coord.co/v1/bike/location?latitude=" + lat + "&longitude=" + lon + "&radius_km=5&access_key=\(API_KEY.BIKE_INTEGRATION)"
+        let bikeURL = "https://api.coord.co/v1/bike/location?latitude=" + lat + "&longitude=" + lon + "&radius_km=100&access_key=\(API_KEY.BIKE_INTEGRATION)"
         
         print(" Str URL ==\(bikeURL)")
         
@@ -461,23 +461,41 @@ class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDele
         {
             let resultArr = bikeDictResult.value(forKey: "features") as? NSArray
             
-            if resultArr != nil {
-                for dict in resultArr! {
-                    
+            if resultArr != nil
+            {
+                for dict in resultArr!
+                {
                     let strLat = (dict as! NSDictionary).value(forKeyPath: "properties.lat") as! NSNumber
-                    
                     let strLng = (dict as! NSDictionary).value(forKeyPath: "properties.lon") as! NSNumber
-                    
+                    let strLocationType = (dict as! NSDictionary).value(forKeyPath: "properties.location_type") as! String
                     let strName = (dict as! NSDictionary).value(forKeyPath: "properties.name") as! String
-                    
                     let bikeAvailable = (dict as! NSDictionary).value(forKeyPath: "properties.num_bikes_available") as? Int
                     let bikeDockAvailable = (dict as! NSDictionary).value(forKeyPath: "properties.num_docks_available") as? Int
+                    
+                    var strType = String()
+
+                    if strLocationType == "free_bike"
+                    {
+                        strType = "Dockless"
+                    }
+                    else if strLocationType == "bike_station_dock"
+                    {
+                        strType = "Dock"
+                    }
+                    else if strLocationType == "bike_station_hub"
+                    {
+                        strType = "Dockless with hub"
+                    }
+                    else
+                    {
+                        strType =  strLocationType.replacingOccurrences(of: "_", with: " ")
+                    }
                     
                     let position = CLLocationCoordinate2D(latitude: strLat.doubleValue, longitude: strLng.doubleValue)
                     let marker = GMSMarker(position: position)
                     marker.title = strName
                     marker.iconView = UIImageView.init(image: #imageLiteral(resourceName: "bike"))
-                    marker.snippet = "Bikes Available: \(bikeAvailable ?? 0), Docks Available: \(bikeDockAvailable ?? 0) "
+                    marker.snippet = "Station Type: \(strType) \nBikes Available: \(bikeAvailable ?? 0) \nDocks Available: \(bikeDockAvailable ?? 0) "
                     marker.tracksViewChanges = true
                     marker.map = routeMapView
                     bikeMarkerArr.append(marker)
@@ -576,7 +594,14 @@ class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDele
                 
                 if reachability.connection == .wifi {
                     print("Reachable via WiFi")
-                    self?.videoPlayURL = self?.directionVideoURLArr[index].value(forKey:"high_res_url") as! NSString
+                    if let lowResURl = self?.directionVideoURLArr[index].value(forKey:"low_res_url")
+                    {
+                        self?.videoPlayURL = lowResURl as! NSString
+                    }
+                    else
+                    {
+                        self?.videoPlayURL = self?.directionVideoURLArr[index].value(forKey:"high_res_url") as! NSString
+                    }
                     
                 } else {
                     print("Reachable via Cellular")
@@ -598,14 +623,40 @@ class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDele
                         self?.getUpdatedVideoGeoPoints(geoPointName: geoPointstr as! String)
                     }
                     else{
-                        self?.playerManager.playUrlStr = self?.videoPlayURL! as String?
                         
-                        self?.playerManager.playerView.currentTime = (self?.departureStops.sec!)!
-                        self?.playerManager.playerView.startTimeValue = Double((self?.departureStops.sec!)!)
-                        let endTime = Double((self?.departureStops.sec!)!) + Double((self?.videoGeoPoints.count)!-1) as Double
-                        self.self?.playerManager.playerView.endTimeValue = endTime
-                        
-                        self?.playerManager.seekToTime(Int((self.self?.playerManager.playerView.startTimeValue)!))
+                        if (self?.playerManager.playerView.currentTime)! >= Int((self?.playerManager.playerView.endTimeValue)!)
+                        {
+                            self?.playerManager.playUrlStr = self?.videoPlayURL! as String?
+                            self?.playerManager.playerView.currentTime = (self?.departureStops.sec)!
+                            
+                            self?.playerManager.playerView.startTimeValue = Double((self?.departureStops.sec!)!)
+                            
+                            let endTime = Double((self?.departureStops.sec!)!) + Double((self?.videoGeoPoints.count)!-1) as Double
+                            self.self?.playerManager.playerView.endTimeValue = endTime
+                            
+                            self?.playerManager.seekToTime(Int((self.self?.playerManager.playerView.startTimeValue)!))
+                            
+                            let location = CLLocation(latitude: (self?.departureStops.location?.coordinate.latitude)!, longitude: (self?.departureStops.location?.coordinate.longitude)!)
+                            
+                            self?.delay(seconds: 0.3, closure: { () -> () in
+                                let updatePosition = GMSCameraUpdate.setTarget(location.coordinate)
+                                self?.routeMapView.animate(with: updatePosition)
+                                self?.delay(seconds: 0.5, closure: { () -> () in
+                                    let zoomIn = GMSCameraUpdate.zoom(to: 16.0)
+                                    self?.routeMapView.animate(with: zoomIn)
+                                })
+                            })
+                        }
+                        else {
+                            let currentTime = self?.playerManager.playerView.currentTime
+                            self?.playerManager.changePlayUrl((self?.videoPlayURL! as String?)!, startTime: currentTime!)
+                            
+                            self?.playerManager.playerView.startTimeValue = Double((self?.departureStops.sec!)!)
+                            let endTime = Double((self?.departureStops.sec!)!) + Double((self?.videoGeoPoints.count)!-1) as Double
+                            self.self?.playerManager.playerView.endTimeValue = endTime
+                            
+                            self?.playerManager.seekToTime(Int(currentTime!))
+                        }
                         
                         self?.btnPlayVideo.accessibilityValue = "0"
                         self?.playerManager.pause()
@@ -613,7 +664,6 @@ class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDele
                         self?.lblPlayVideo.text = "PLAY"
                         self?.btnPlayVideo.isEnabled = true
                     }
-                    
                 }
             }
         }
@@ -684,25 +734,47 @@ class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDele
             self.playerManager.pause()
             DispatchQueue.main.async {
                 self.drawRouteLine()
-                self.playerManager.playUrlStr = self.videoPlayURL! as String?
                 
-                self.playerManager.playerView.currentTime = (self.departureStops.sec!)
-                self.playerManager.playerView.startTimeValue = Double((self.departureStops.sec!))
-                let endTime = Double((self.departureStops.sec!)) + Double((self.videoGeoPoints.count)-1) as Double
-                self.playerManager.playerView.endTimeValue = endTime
-                
-                self.playerManager.seekToTime(Int((self.self.playerManager.playerView.startTimeValue)!))
+                if self.playerManager.playerView.currentTime >= Int(self.playerManager.playerView.endTimeValue)
+                {
+                    self.playerManager.changePlayUrl((self.videoPlayURL! as String?)!, startTime: self.departureStops.sec!)
+                    
+                    self.playerManager.playerView.currentTime = (self.departureStops.sec!)
+                    self.playerManager.playerView.startTimeValue = Double((self.departureStops.sec!))
+                    let endTime = Double((self.departureStops.sec!)) + Double((self.videoGeoPoints.count)-1) as Double
+                    self.playerManager.playerView.endTimeValue = endTime
+                    
+                    self.playerManager.playerView.seekToVideo(Int(self.playerManager.playerView.startTimeValue))
+                    
+                    let location = CLLocation(latitude: (self.departureStops.location?.coordinate.latitude)!, longitude: (self.departureStops.location?.coordinate.longitude)!)
+                    
+                    self.delay(seconds: 0.3, closure: { () -> () in
+                        let updatePosition = GMSCameraUpdate.setTarget(location.coordinate)
+                        self.routeMapView.animate(with: updatePosition)
+                        self.delay(seconds: 0.5, closure: { () -> () in
+                            let zoomIn = GMSCameraUpdate.zoom(to: 16.0)
+                            self.routeMapView.animate(with: zoomIn)
+                        })
+                    })
+                }
+                else {
+                    let currentTime = self.playerManager.playerView.currentTime
+                    self.playerManager.changePlayUrl((self.videoPlayURL! as String?)!, startTime: currentTime)
+                    
+                    self.playerManager.playerView.startTimeValue = Double((self.departureStops.sec!))
+                    let endTime = Double((self.departureStops.sec!)) + Double((self.videoGeoPoints.count)-1) as Double
+                    self.playerManager.playerView.endTimeValue = endTime
+                    self.playerManager.seekToTime(Int((self.self.playerManager.playerView.currentTime)))
+                }
                 
                 self.btnPlayVideo.accessibilityValue = "0"
                 self.playerManager.pause()
                 self.btnPlayVideo.isSelected = false
                 self.lblPlayVideo.text = "PLAY"
                 self.btnPlayVideo.isEnabled = true
-
             }
         })
     }
-    
     
     
     // MARK: SETUP AVPLAYER
@@ -742,7 +814,7 @@ class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDele
         for stops in routeRangeStopsArr {
             let position = CLLocationCoordinate2D(latitude: stops.lat!, longitude: stops.lng!)
             let marker = GMSMarker(position: position)
-          //  marker.title = stops.name
+            //  marker.title = stops.name
             marker.iconView = UIImageView.init(image: #imageLiteral(resourceName: "map_Stop"))
             marker.tracksViewChanges = true
             marker.map = routeMapView
@@ -819,7 +891,7 @@ class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDele
             let latLngStr = lat + "," + lng
             
             
-           // self.getPOIs(latLong: latLngStr, type: "bank")
+            // self.getPOIs(latLong: latLngStr, type: "bank")
             self.getMeetUps(lat: lat, lon: lng)
             self.getBikeIntegrationData(lat: lat, lon: lng)
             self.showCustomPOIsOnPauseVideo()
@@ -869,7 +941,7 @@ class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDele
         }
         
         if (routeLine != nil) {
-             routeLine.map = nil
+            routeLine.map = nil
         }
         
         /* show what you have drawn */
@@ -931,8 +1003,8 @@ class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDele
                     }
                 }
                 
-//                let camera = GMSCameraPosition.camera(withTarget: location.coordinate, zoom: 16.0)
-//                routeMapView.camera = camera
+                //                let camera = GMSCameraPosition.camera(withTarget: location.coordinate, zoom: 16.0)
+                //                routeMapView.camera = camera
                 
                 let nextStop = routeRangeStopsArr.filter({ $0.sec! > playerManager.playerView.currentTime}).first
                 
@@ -1175,7 +1247,7 @@ class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDele
                         let directionStr = "<div style=\"font-size:1.20em;font-family:'OpenSans'\">" + instrcution + "</div>"
                         let attribute = directionStr.htmlAttributed(using: UIFont.systemFont(ofSize: 12.0))
                         //let attr = try? NSAttributedString(htmlString: directionStr)
-
+                        
                         self.lblNaviDirectionName.attributedText = attribute
                         self.lblNaviDirectionName.textAlignment = .center
                         self.lblNaviDirectionName.adjustsFontSizeToFitWidth = true
@@ -1214,8 +1286,6 @@ extension ShowRoutesDetailVC: NetworkStatusListener {
         switch status {
         case .none:
             debugPrint("ViewController: Network became unreachable")
-            
-            
         case .wifi:
             debugPrint("ViewController: Network reachable through WiFi")
         case .cellular:

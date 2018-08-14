@@ -41,6 +41,7 @@ class PlayerView: UIView, UIGestureRecognizerDelegate {
     weak var delegate: PlayerViewDelegate?
     var totalTime = 0 // 总时间
     var currentTime = 0 // 当前播放时间
+    var prevCrntTime = 0.0
     
     // MARK:- 控件
     lazy var player: AVPlayer = {
@@ -56,7 +57,7 @@ class PlayerView: UIView, UIGestureRecognizerDelegate {
     
     fileprivate var backBtn = UIButton()
     fileprivate let progressView = UIProgressView()
-    fileprivate let progressSlider = UISlider()
+    public let progressSlider = UISlider()
     fileprivate var systemSlider = UISlider()
     fileprivate let lightSlider = UISlider()
     fileprivate let volumeSlider = UISlider()
@@ -263,7 +264,6 @@ class PlayerView: UIView, UIGestureRecognizerDelegate {
         progressSlider.addTarget(self, action: #selector(sliderEndDrag(slider:)), for: .touchUpInside)
         progressSlider.addTarget(self, action: #selector(sliderEndDrag(slider:)), for: .touchDragExit)
         progressSlider.addTarget(self, action: #selector(sliderEndDrag(slider:)), for: .touchDragOutside)
-        
         
     }
     
@@ -535,8 +535,11 @@ extension PlayerView {
         let durationT = playerItem?.duration.value ?? 0
         let timescaleT = playerItem?.duration.timescale ?? 0
         if (TimeInterval(durationT) == 0) || (TimeInterval(timescaleT) == 0) {
+            //progressSlider.value = Float(prevCrntTime)
+            progressSlider.isHidden = true
             return
         }
+        progressSlider.isHidden = false
         guard let currentT = playerItem?.currentTime() else {
             return
         }
@@ -548,6 +551,8 @@ extension PlayerView {
             // 显示时间
             refreshTimeLabelValue(CMTimeMake(Int64(currentTime), 1))
             progressSlider.value = Float(TimeInterval(currentTime) / (TimeInterval(durationT) / TimeInterval(timescaleT)))
+            prevCrntTime = Double(progressSlider.value)
+            print("Progess slider .....\(progressSlider.value)")
         }
         // 开始播放停止转子
         if (player.status == AVPlayerStatus.readyToPlay) {
