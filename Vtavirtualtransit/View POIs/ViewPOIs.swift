@@ -53,11 +53,18 @@ class ViewPOIs: UIViewController, UITableViewDataSource, UITableViewDelegate, UI
         tablePOIs.rowHeight = UITableViewAutomaticDimension
         tablePOIs.estimatedRowHeight = 100
         
-        strType = "bank"
-        
-        self.getPOIs(latLong: strLatLong, type: strType)
+//        strType = "bank"
+//
+//        self.getPOIs(latLong: strLatLong, type: strType)
         self.btnFilter(_sender: btnFilter)
         self.setupBorderView()
+        let tap: UITapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(dismissKeyboard))
+        tap.numberOfTapsRequired = 1
+        self.view.addGestureRecognizer(tap)
+    }
+    
+    @objc func dismissKeyboard() {
+        view.endEditing(true)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -94,7 +101,7 @@ class ViewPOIs: UIViewController, UITableViewDataSource, UITableViewDelegate, UI
             self?.txtChooseType.text = item
             
             strType = item.replacingOccurrences(of: " ", with: "_").lowercased()
-            
+            self?.txtChooseType.resignFirstResponder()
             self?.getPOIs(latLong: (self?.strLatLong)!, type: strType)
         }
     }
@@ -306,14 +313,9 @@ class ViewPOIs: UIViewController, UITableViewDataSource, UITableViewDelegate, UI
     
     //MARK : UITEXTFIELD DELEGATE
     
-    func textFieldShouldBeginEditing(_ textField: UITextField) -> Bool {
-        
+    func textFieldDidBeginEditing(_ textField: UITextField)
+    {
         viewsDropDown.show()
-        
-        return true
-    }
-    
-    func textFieldDidBeginEditing(_ textField: UITextField) {
     }
     
     func textFieldShouldEndEditing(_ textField: UITextField) -> Bool {
@@ -358,6 +360,8 @@ class ViewPOIs: UIViewController, UITableViewDataSource, UITableViewDelegate, UI
         textField.resignFirstResponder()
         return true
     }
+    
+   
 }
 
 extension Array where Element:Equatable {

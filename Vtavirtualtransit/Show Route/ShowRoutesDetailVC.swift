@@ -77,6 +77,9 @@ class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDele
     var customPOIArr = [CustomPOI]()
     var customPOIMarker = [GMSMarker]()
     
+    var multiBikeDictResult = NSDictionary()
+    var multiBikeMarkerArr = [GMSMarker]()
+    
     
     @IBOutlet weak var bottomBtnConstraint: NSLayoutConstraint!
     
@@ -163,7 +166,7 @@ class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDele
     
     @objc func showRouteMapPOIMeetupBike() {
         
-        let poiGeoPoint = videoGeoPoints[0]
+        let poiGeoPoint = videoGeoPoints[1]
         
         let lat:String = String(format:"%f", poiGeoPoint.lat!)
         let lng: String = String(format:"%f",poiGeoPoint.lng!)
@@ -173,6 +176,7 @@ class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDele
         self.getMeetUps(lat: lat, lon: lng)
         self.getBikeIntegrationData(lat: lat, lon: lng)
         self.showCustomPOIsOnPauseVideo()
+        self.getMultiCycleIntegrationData(bikeLat: Float(poiGeoPoint.lat!), bikeLon: Float(poiGeoPoint.lng!))
     }
     
     //MARK: - POIs
@@ -473,7 +477,7 @@ class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDele
                     let bikeDockAvailable = (dict as! NSDictionary).value(forKeyPath: "properties.num_docks_available") as? Int
                     
                     var strType = String()
-
+                    
                     if strLocationType == "free_bike"
                     {
                         strType = "Dockless"
@@ -502,8 +506,86 @@ class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDele
                 }
             }
         }
-        
     }
+    
+    // MARK: - MULTI CYCLE INTRGRATION
+    
+    func getMultiCycleIntegrationData(bikeLat : Float, bikeLon: Float)
+    {
+        let multiCycleURL = "https://api.multicycles.org/v1?access_token=\(API_KEY.MULTI_CYCLE_ACCESS_TOKEN)"
+       
+        
+        let headers = [
+            "content-type": "application/json",
+            "cache-control": "no-cache"]
+        
+        let parameters = ["query": "query ($lat: Float!, $lng: Float!) {vehicles(lat: $lat, lng: $lng) {id\ntype\nattributes\nlat\nlng }}",
+                          "variables": ["lat": bikeLat,"lng": bikeLon]] as [String : Any]
+        
+        let jsonData = try? JSONSerialization.data(withJSONObject: parameters)
+        
+        let request = NSMutableURLRequest(url: NSURL(string: multiCycleURL)! as URL,
+                                          cachePolicy: .useProtocolCachePolicy,
+                                          timeoutInterval: 10.0)
+        
+        request.httpMethod = "POST"
+        request.allHTTPHeaderFields = headers
+        request.httpBody = jsonData
+        
+        let session = URLSession.shared
+        let dataTask = session.dataTask(with: request as URLRequest, completionHandler: { (data, response, error) -> Void in
+            if (error != nil) {
+                print(error?.localizedDescription as Any)
+                let alertController = UIAlertController(title: "Virtualtour", message: "Could not connect to the server.\n Please try again." as String, preferredStyle: .alert)
+                let okAction = UIAlertAction(title: "Ok", style: .cancel, handler: { action in})
+                alertController.addAction(okAction)
+                self.present(alertController, animated: true, completion: nil)
+            } else {
+                DispatchQueue.main.async {
+                    let responseJSON = try? JSONSerialization.jsonObject(with: data!, options: [])
+                    if let responseJSON = responseJSON as? [String: Any] {
+                        print(responseJSON)
+                        self.multiBikeDictResult = responseJSON as NSDictionary
+                        self.multiBikeMarkerArr.removeAll()
+                        if !self.btnPlayVideo.isSelected {
+                            self.showMultiBikeOnPauseVideo()
+                        }
+                    }
+                }
+            }
+        })
+        
+        dataTask.resume()
+    }
+    
+    func showMultiBikeOnPauseVideo() {
+        
+        if (multiBikeDictResult != nil && multiBikeDictResult.count > 0)
+        {
+            let resultArr = multiBikeDictResult.value(forKeyPath: "data.vehicles") as? NSArray
+            
+            if resultArr != nil
+            {
+                for dict in resultArr!
+                {
+                    let strLat = (dict as! NSDictionary).value(forKeyPath: "lat") as! NSNumber
+                    let strLng = (dict as! NSDictionary).value(forKeyPath: "lng") as! NSNumber
+                    let type = (dict as! NSDictionary).value(forKeyPath: "type") as! String
+                    let id = (dict as! NSDictionary).value(forKeyPath: "id") as! String
+                    
+                    let position = CLLocationCoordinate2D(latitude: strLat.doubleValue, longitude: strLng.doubleValue)
+                    let marker = GMSMarker(position: position)
+                    marker.title = "Limebike"
+                    marker.iconView = UIImageView.init(image: #imageLiteral(resourceName: "limebike"))
+                    marker.snippet = "ID: \(id)\nType: \(type)\nBattery Level: high"
+                    marker.tracksViewChanges = true
+                    marker.map = routeMapView
+                    multiBikeMarkerArr.append(marker)
+                }
+            }
+        }
+    }
+        
     
     //MARK: - NAVIGATION
     
@@ -895,6 +977,7 @@ class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDele
             self.getMeetUps(lat: lat, lon: lng)
             self.getBikeIntegrationData(lat: lat, lon: lng)
             self.showCustomPOIsOnPauseVideo()
+            self.getMultiCycleIntegrationData(bikeLat: Float(poiGeoPoint.lat!), bikeLon: Float(poiGeoPoint.lng!))
         }
         else {
             
@@ -926,6 +1009,12 @@ class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDele
             
             if customPOIMarker.count > 0 {
                 for marker in customPOIMarker {
+                    marker.map = nil
+                }
+            }
+            
+            if multiBikeMarkerArr.count > 0 {
+                for marker in multiBikeMarkerArr {
                     marker.map = nil
                 }
             }

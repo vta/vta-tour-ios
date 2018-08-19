@@ -10,28 +10,12 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Vtavirtualtransit/Near Me/ShowNearMeInterestVC.swift"
-            timestampString = "555716406.996972"
+            timestampString = "556358427.989249"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "395"
             endingLineNumber = "395"
             landmarkName = "loadPoi(latLong:type:)"
-            landmarkType = "7">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Vtavirtualtransit/Show Route/ShowRoutesDetailVC.swift"
-            timestampString = "555962700.375327"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "991"
-            endingLineNumber = "991"
-            landmarkName = "updateMarkerPosition(updateIndex:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

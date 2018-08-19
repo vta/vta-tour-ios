@@ -16,6 +16,8 @@ class API_KEY {
     static let GetPOI           = "AIzaSyCtcAgy9OWcbJVh_qYKUccyGQ0GxlP7b4I"
     static let MeetUp           = "571be3a636c7d458136d38715b7ee"
     static let BIKE_INTEGRATION = "k8CpcG__d1rKlm0e3Ol50DOHZ1DUt7NHcScsV2fbGtE"
+    static let MULTI_CYCLE_ACCESS_TOKEN = "mpFeHRzpOnkH7drhZ4IbSIBLk7Ei3sPl"
+    
 }
 
 

@@ -89,6 +89,7 @@ class ViewController: UIViewController , UITextFieldDelegate, CLLocationManagerD
         self.setupDefaultDropDown()
         
         ref = Database.database().reference()
+        SVProgressHUD.setDefaultMaskType(.clear)
         SVProgressHUD.show()
         self.fetchMainRoutes()
         self.setupBorderView()
@@ -598,7 +599,9 @@ class ViewController: UIViewController , UITextFieldDelegate, CLLocationManagerD
             let geofireRef = Database.database().reference().child("stops")
             let geoFire = GeoFire(firebaseRef: geofireRef)
             
-            circleQuery = geoFire.query(at: self.locationManager.location!, withRadius: 0.6)
+            //circleQuery = geoFire.query(at: self.locationManager.location!, withRadius: 0.6)
+            circleQuery = geoFire.query(at: CLLocation(latitude: 37.418630, longitude: -121.901602), withRadius: 0.6)
+
             var arrNearMeStops = [Stops]()
             DispatchQueue.main.async {
                 SVProgressHUD.show()
@@ -665,7 +668,6 @@ class ViewController: UIViewController , UITextFieldDelegate, CLLocationManagerD
                         let alertController = UIAlertController(title: "Alert", message: "No nearest route available", preferredStyle: .alert)
                         
                         let dismiss = UIAlertAction(title: "Dismiss", style: .default) { (action:UIAlertAction) in
-                            //                            self.getRoutesDetailFromFireBase(isUserLocation: false)
                         }
                         alertController.addAction(dismiss)
                         self.present(alertController, animated: true, completion: nil)
@@ -1039,28 +1041,13 @@ class ViewController: UIViewController , UITextFieldDelegate, CLLocationManagerD
     func getNearestStopsAccordingRoutes() {
         
         if selectRoutesStopsArr.count > 0 {
-            
             let stops = selectRoutesStopsArr
-            
-            stops.sorted(by: { (s1, s2) -> Bool in
+            let tempStops = stops.sorted(by: { (s1, s2) -> Bool in
                 (s1.location?.distance(from: locationManager.location!))! < (s2.location?.distance(from: locationManager.location!))!
             })
-            arrNearMeStops = Array(stops[0..<3])
+            arrNearMeStops = Array(tempStops[0..<3])
         }
     }
-    
-    // TEST
-    
-    //    func findNearestStopsTest() {
-    //
-    //
-    //        ref.child("stops").observe(DataEventType.childAdded) { (snapshot) in
-    //
-    //
-    //            print("SnapSHot ----\(snapshot.childrenCount)")
-    //        }
-    //    }
-    
 }
 
 extension UIView {
