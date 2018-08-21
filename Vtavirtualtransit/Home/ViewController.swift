@@ -599,8 +599,8 @@ class ViewController: UIViewController , UITextFieldDelegate, CLLocationManagerD
             let geofireRef = Database.database().reference().child("stops")
             let geoFire = GeoFire(firebaseRef: geofireRef)
             
-            //circleQuery = geoFire.query(at: self.locationManager.location!, withRadius: 0.6)
-            circleQuery = geoFire.query(at: CLLocation(latitude: 37.418630, longitude: -121.901602), withRadius: 0.6)
+            circleQuery = geoFire.query(at: self.locationManager.location!, withRadius: 0.6)
+            //circleQuery = geoFire.query(at: CLLocation(latitude: 37.418630, longitude: -121.901602), withRadius: 0.6)
 
             var arrNearMeStops = [Stops]()
             DispatchQueue.main.async {
@@ -1131,5 +1131,4 @@ extension ViewController: NetworkStatusListener {
         }
     }
 }
-
 

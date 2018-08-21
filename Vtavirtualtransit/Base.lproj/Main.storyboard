@@ -7,6 +7,7 @@
         <deployment identifier="iOS"/>
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
+        <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -668,7 +669,7 @@
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="j90-Dd-7di" userLabel="NearBy Animitys">
                                 <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                                 <subviews>
-                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="50" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="WYP-4F-LL2">
+                                    <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="none" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="WYP-4F-LL2">
                                         <rect key="frame" x="0.0" y="0.0" width="320" height="504"/>
                                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                         <prototypes>
@@ -679,9 +680,9 @@
                                                     <rect key="frame" x="0.0" y="0.0" width="320" height="50"/>
                                                     <autoresizingMask key="autoresizingMask"/>
                                                     <subviews>
-                                                        <label opaque="NO" userInteractionEnabled="NO" tag="10" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SBF-EZ-wIE">
-                                                            <rect key="frame" x="15" y="4" width="262" height="40"/>
-                                                            <fontDescription key="fontDescription" name="OpenSans" family="Open Sans" pointSize="17"/>
+                                                        <label opaque="NO" userInteractionEnabled="NO" tag="10" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SBF-EZ-wIE">
+                                                            <rect key="frame" x="15" y="8" width="262" height="34"/>
+                                                            <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                                             <nil key="textColor"/>
                                                             <nil key="highlightedColor"/>
                                                         </label>
@@ -693,22 +694,22 @@
                                                             </constraints>
                                                         </view>
                                                         <imageView opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO" image="ic_right_arrow" translatesAutoresizingMaskIntoConstraints="NO" id="f4K-Vf-7XO">
-                                                            <rect key="frame" x="290" y="16" width="15" height="15"/>
+                                                            <rect key="frame" x="290" y="17.5" width="15" height="15"/>
                                                             <constraints>
-                                                                <constraint firstAttribute="width" constant="15" id="pnP-k7-lQm"/>
-                                                                <constraint firstAttribute="height" constant="15" id="shB-NF-4xg"/>
+                                                                <constraint firstAttribute="height" constant="15" id="Dcx-io-qhi"/>
+                                                                <constraint firstAttribute="width" constant="15" id="hXa-4r-BMP"/>
                                                             </constraints>
                                                         </imageView>
                                                     </subviews>
                                                     <constraints>
                                                         <constraint firstAttribute="bottom" secondItem="JT7-HD-vnR" secondAttribute="bottom" constant="4.5" id="ASq-TV-Izq"/>
                                                         <constraint firstAttribute="trailing" secondItem="JT7-HD-vnR" secondAttribute="trailing" constant="15" id="FZU-TM-rVI"/>
-                                                        <constraint firstItem="SBF-EZ-wIE" firstAttribute="top" secondItem="5Qn-PX-D80" secondAttribute="top" constant="4" id="GGP-eP-bEd"/>
+                                                        <constraint firstItem="SBF-EZ-wIE" firstAttribute="top" secondItem="5Qn-PX-D80" secondAttribute="top" constant="8" id="GGP-eP-bEd"/>
                                                         <constraint firstItem="SBF-EZ-wIE" firstAttribute="leading" secondItem="5Qn-PX-D80" secondAttribute="leading" constant="15" id="J1Q-1z-lhl"/>
-                                                        <constraint firstAttribute="bottom" secondItem="SBF-EZ-wIE" secondAttribute="bottom" constant="5.5" id="WPO-h7-XS3"/>
-                                                        <constraint firstAttribute="trailing" secondItem="f4K-Vf-7XO" secondAttribute="trailing" constant="15" id="jFz-X7-BmH"/>
+                                                        <constraint firstItem="f4K-Vf-7XO" firstAttribute="centerY" secondItem="5Qn-PX-D80" secondAttribute="centerY" id="NMr-8f-Rc7"/>
+                                                        <constraint firstAttribute="bottom" secondItem="SBF-EZ-wIE" secondAttribute="bottom" constant="8" id="WPO-h7-XS3"/>
+                                                        <constraint firstItem="f4K-Vf-7XO" firstAttribute="trailing" secondItem="5Qn-PX-D80" secondAttribute="trailingMargin" id="emo-cu-4QK"/>
                                                         <constraint firstItem="JT7-HD-vnR" firstAttribute="leading" secondItem="5Qn-PX-D80" secondAttribute="leading" constant="15" id="lYN-Yz-Csr"/>
-                                                        <constraint firstItem="f4K-Vf-7XO" firstAttribute="top" secondItem="5Qn-PX-D80" secondAttribute="top" constant="16" id="wam-9D-iJX"/>
                                                         <constraint firstAttribute="trailing" secondItem="SBF-EZ-wIE" secondAttribute="trailing" constant="43" id="yvB-70-XHk"/>
                                                     </constraints>
                                                 </tableViewCellContentView>
@@ -1237,7 +1238,7 @@
                     <navigationItem key="navigationItem" id="kbq-n5-JeC">
                         <nil key="title"/>
                         <view key="titleView" contentMode="scaleToFill" id="B9J-k0-OGa">
-                            <rect key="frame" x="53" y="2" width="215" height="40"/>
+                            <rect key="frame" x="52.5" y="2" width="215" height="40"/>
                             <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                             <subviews>
                                 <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" lineBreakMode="tailTruncation" numberOfLines="0" baselineAdjustment="alignBaselines" minimumFontSize="8" translatesAutoresizingMaskIntoConstraints="NO" id="EC2-2H-V37">

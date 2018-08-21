@@ -213,7 +213,6 @@ class NavigationVC: UIViewController, GMSMapViewDelegate {
         }
     }
     
-    
     func getDirectionData(startStops: Stops, endStops: Stops) -> String {
         
         let thisLat:String = String(format:"%f", startStops.lat!)
