@@ -71,57 +71,73 @@ class ShowNearMeVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         selectStops = arrNearMeStops.first
         self.title = selectStops.name
         
-        mainArr = ["Amenities", "Connections", "Social Gathering", "Custom POI"]
+        mainArr = ["Amenities", "Social Gathering","Transit Connections"]
+    
+        arrCategory = ["transit_station",
+        "airport",
+        "gym|stadium|bowling_alley",
+        "school|library",
+        "restaurant|cafe|bakery|bar",
+        "supermarket|shopping_mall",
+        "store",
+        "post_office",
+        "museum|art_gallery|aquarium|zoo",
+        "courthouse|local_government_office|City_hall",
+        "doctor|dentist",
+        "hospital|pharmacy|veterinary_care",
+        "park|amusement_park",
+        "church|hindu_temple|synagogue|mosque",
+        "movie_theater|night_club",
+        "hair_care|spa|beauty_salon",
+        "physiotherapist",
+        "parking|lodging",
+        "police|fire_station",
+        "atm|bank",
+        "cemetery",
+        "accounting",
+        "insurance_agency",
+        "real_estate_agency",
+        "lawyer",
+        "laundry",
+        "meal_delivery|meal_takeaway",
+        "movie_rental",
+        "florist",
+        "travel_agency",
+        "funeral_home",
+        "electrician",
+        "locksmith",
+        "painter",
+        "plumber",
+        "roofing_contractor",
+        "taxi_stand",
+        "gas_station",
+        "moving_company",
+        "storage",
+        "casino",
+        "rv_park",
+        "car_wash",
+        "car_repair",
+        "car_rental",
+        "car_dealer",
+        "campground",
+        "subway_station",
+        "pet_store",
+        "hardware_store",
+        "department_store",
+        "convenience_store",
+        "bicycle_store",
+        "book_store",
+        "electronics_store",
+        "clothing_store",
+        "furniture_store",
+        "shoe_store",
+        "home_goods_store",
+        "jewelry_store",
+        "liquor_store",
+        "furniture_store",
+        "embassy"]
         
-        arrCategory = ["airport",
-                       "gym|stadium|bowling_alley",
-                       "school|library",
-                       "transit_station|bus_station|train_station",
-                       "restaurant|cafe|bakery|bar",
-                       "supermarket|shopping_mall",
-                       "store|pet_store|hardware_store|department_store|convenience_store|bicycle_store|book_store|electronics_store|clothing_store|furniture_store|shoe_store|home_goods_store|jewelry_store|liquor_store|furniture_store",
-                       "courthouse|post_office|local_government_office|city_hall|embassy",
-                       "museum|art_gallery|aquarium|zoo",
-                       "hospital|doctor|pharmacy|dentist|veterinary_care",
-                       "park|amusement_park",
-                       "church|hindu_temple|synagogue|mosque",
-                       "movie_theater|night_club",
-                       "hair_care|spa|beauty_salon|physiotherapist",
-                       "parking|lodging",
-                       "police|fire_station",
-                       "atm|bank",
-                       "cemetery",
-                       "accounting",
-                       "insurance_agency",
-                       "real_estate_agency",
-                       "lawyer",
-                       "laundry",
-                       "meal_delivery|meal_takeaway",
-                       "movie_rental",
-                       "florist",
-                       "travel_agency",
-                       "funeral_home",
-                       "electrician",
-                       "locksmith",
-                       "painter",
-                       "plumber",
-                       "roofing_contractor",
-                       "taxi_stand",
-                       "gas_station",
-                       "moving_company",
-                       "storage",
-                       "casino",
-                       "rv_park",
-                       "car_wash",
-                       "car_repair",
-                       "car_rental",
-                       "car_dealer",
-                       "campground",
-                       "subway_station"]
-        
-        //        arrCategory = ["accounting","airport","amusement_park","aquarium","art_gallery","atm","bakery","bank","bar","beauty_salon","bicycle_store","book_store","bowling_alley","bus_station","cafe","campground","car_dealer","car_rental","car_repair","car_wash","casino","cemetery","church","city_hall","clothing_store","convenience_store","courthouse","dentist","department_store","doctor","electrician","electronics_store","embassy","fire_station","florist","funeral_home","furniture_store","gas_station","gym","hair_care","hardware_store","hindu_temple","home_goods_store","hospital","insurance_agency","jewelry_store","laundry","lawyer","library","liquor_store","local_government_office","locksmith","lodging","meal_delivery","meal_takeaway","mosque","movie_rental","movie_theater","moving_company","museum","night_club","painter","park","parking","pet_store","pharmacy","physiotherapist","plumber","police","post_office","real_estate_agency","restaurant","roofing_contractor","rv_park","school","shoe_store","shopping_mall","spa","stadium","storage","store","subway_station","supermarket","synagogue","taxi_stand","train_station","transit_station","travel_agency","veterinary_care","zoo"]
-        
-        arrValidCategory.removeAll()
+            arrValidCategory.removeAll()
         self.recursiveMethodGetCategoryAccordingNearBy()
         
     }
@@ -165,11 +181,15 @@ class ShowNearMeVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         return cell
     }
     
-    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath)
+    {
         selectIndex = indexPath.row
         
-        
-        if selectIndex > 3 && amenitiesArr[indexPath.row] != "Load More" {
+        if self.mainArr.contains(amenitiesArr[indexPath.row]) || amenitiesArr[indexPath.row] == "Custom POI"
+        {
+            self.performSegue(withIdentifier: "nearme_poi_segue", sender: nil)
+        }
+        else  if  amenitiesArr[indexPath.row] != "Load More" {
             
             let lat:String = String(format:"%f",selectStops.lat!)
             let lng: String = String(format:"%f",selectStops.lng!)
@@ -180,10 +200,7 @@ class ShowNearMeVC: UIViewController, UITableViewDelegate, UITableViewDataSource
             
             self.loadPoiCategory(latLong: strLatLng, type: typeStr)
         }
-        else if selectIndex <= 3 {
-            self.performSegue(withIdentifier: "nearme_poi_segue", sender: nil)
-        }
-        else if selectIndex > 3 && amenitiesArr[indexPath.row] == "Load More" {
+        else if  amenitiesArr[indexPath.row] == "Load More" {
             isLoadMore = true
             
             if let index = amenitiesArr.index(of: "Load More")
@@ -226,6 +243,7 @@ class ShowNearMeVC: UIViewController, UITableViewDelegate, UITableViewDataSource
                 self?.isLoadMore = false
                 self?.arrValidCategory.removeAll()
                 self?.amenitiesArr.removeAll()
+                self?.tableVwAnimities.reloadData()
                 self?.recursiveMethodGetCategoryAccordingNearBy()
             }
         }
@@ -240,7 +258,7 @@ class ShowNearMeVC: UIViewController, UITableViewDelegate, UITableViewDataSource
             
             if let destinationVC = segue.destination as? ShowNearMeInterestVC {
                 
-                if (amenitiesArr[selectIndex] == "Amenities") || (amenitiesArr[selectIndex] == "Connections")
+                if (amenitiesArr[selectIndex] == "Amenities") || (amenitiesArr[selectIndex] == "Transit Connections")
                 {
                     destinationVC.cellType = "label"
                 }
@@ -278,13 +296,11 @@ class ShowNearMeVC: UIViewController, UITableViewDelegate, UITableViewDataSource
                 poiTypesArr.append(strTypes.replacingOccurrences(of: "_", with: " ").capitalized)
             }
             
-//            poiTypesArr = poiTypesArr.sorted(by: { (s1, s2) -> Bool in
-//                s1 < s2
-//            })
             self.amenitiesArr.removeAll()
             self.amenitiesArr += self.mainArr
             self.amenitiesArr += poiTypesArr
             
+            self.amenitiesArr.append("Custom POI")
             if !isLoadMore {
                 self.amenitiesArr.append("Load More")
             }

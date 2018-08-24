@@ -195,7 +195,7 @@ class ShowNearMeInterestVC: UIViewController, UITableViewDataSource, UITableView
             }
         }
         else if cellType == "label" {
-            if type == "Connections" {
+            if type == "Transit Connections" {
                 
                 let dictDetails = arrData[indexPath.row] as NSDictionary
                 if let connection = dictDetails.value(forKey: "title") {
@@ -226,7 +226,7 @@ class ShowNearMeInterestVC: UIViewController, UITableViewDataSource, UITableView
         if type == "Amenities" {
             self.loadAmenities()
         }
-        else if type == "Connections" {
+        else if type == "Transit Connections" {
             self.loadConnection()
         }
         else if type == "Social Gathering" {
