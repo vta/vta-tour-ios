@@ -10,6 +10,7 @@ import UIKit
 import Firebase
 import CoreLocation
 import Alamofire
+import SVProgressHUD
 
 class ShowNearMeInterestVC: UIViewController, UITableViewDataSource, UITableViewDelegate, CLLocationManagerDelegate {
     
@@ -303,7 +304,7 @@ class ShowNearMeInterestVC: UIViewController, UITableViewDataSource, UITableView
     
     func loadSocialGethering(lat: String?, lon: String?) {
         
-        let strURL = "https://api.meetup.com/2/groups/?lat=" + lat! + "&lon=" + lon! + "&key=\(API_KEY.MeetUp)&radius=5"
+        let strURL = "https://api.meetup.com/2/groups/?lat=" + lat! + "&lon=" + lon! + "&key=\(API_KEY.MeetUp)&radius=1.6"
         
         print(" Str URL ==\(strURL)")
         Alamofire.request(strURL,method: .get, parameters: nil, encoding: URLEncoding.default, headers:nil) .responseJSON { response in
@@ -341,6 +342,9 @@ class ShowNearMeInterestVC: UIViewController, UITableViewDataSource, UITableView
     
     
     func loadCustomePOI() {
+        
+        SVProgressHUD.show()
+        
         self.ref.child("customPois").observeSingleEvent(of: DataEventType.value, with: { (snapshot) in
             
             if snapshot.childrenCount > 0 {
@@ -361,24 +365,38 @@ class ShowNearMeInterestVC: UIViewController, UITableViewDataSource, UITableView
                     
                     let customPOIs = CustomPOI.init(address: address as? String, code: code as? String, icon: icon as? String, latitude: lat as? String, longitude: lng as? String, name: name as? String, vicinity: vicinity as? String, web_link: web_link as? String)
                     
-                    if customPOIs.icon != nil && customPOIs.icon != "" && !(customPOIs.icon?.isEmpty)!
-                    {
-                        var str = customPOIs.icon ?? ""
-                        str = str.replacingOccurrences(of: "data:image/png;base64,", with: "")
-                        str = str.replacingOccurrences(of: "data:image/jpeg;base64,", with: "")
-                        
-                        let dataDecoded:NSData = NSData(base64Encoded: str, options: NSData.Base64DecodingOptions(rawValue: 0))!
-                        
-                        let decodedimage:UIImage = UIImage(data: dataDecoded as Data)!
-                        
-                        let dict : [String:Any] = ["title": customPOIs.name ?? "", "subTitle": customPOIs.address ?? "", "image": decodedimage, "web_link": customPOIs.web_link ?? ""]
-                        self.arrData.append(dict)
+                    var poiLat: Double! = 0.0
+                    var poiLon: Double! = 0.0
+                    
+                    if let lat = customPOIs.latitude, let doubleLat = Double(lat) {
+                        poiLat = doubleLat
                     }
-                    else {
-                        let dict : [String:Any] = ["title": customPOIs.name ?? "", "subTitle": customPOIs.address ?? "", "image": "", "web_link": customPOIs.web_link ?? ""]
-                        self.arrData.append(dict)
+                    if let lon = customPOIs.longitude, let doubleLon = Double(lon) {
+                        poiLon = doubleLon
+                    }
+                    let poiLocation = CLLocation(latitude: poiLat, longitude: poiLon)
+                    
+                    if (self.selectStops.location?.distance(from: poiLocation))! < Double(1600) {
+                        if customPOIs.icon != nil && customPOIs.icon != "" && !(customPOIs.icon?.isEmpty)!
+                        {
+                            var str = customPOIs.icon ?? ""
+                            str = str.replacingOccurrences(of: "data:image/png;base64,", with: "")
+                            str = str.replacingOccurrences(of: "data:image/jpeg;base64,", with: "")
+                            
+                            let dataDecoded:NSData = NSData(base64Encoded: str, options: NSData.Base64DecodingOptions(rawValue: 0))!
+                            
+                            let decodedimage:UIImage = UIImage(data: dataDecoded as Data)!
+                            
+                            let dict : [String:Any] = ["title": customPOIs.name ?? "", "subTitle": customPOIs.address ?? "", "image": decodedimage, "web_link": customPOIs.web_link ?? ""]
+                            self.arrData.append(dict)
+                        }
+                        else {
+                            let dict : [String:Any] = ["title": customPOIs.name ?? "", "subTitle": customPOIs.address ?? "", "image": "", "web_link": customPOIs.web_link ?? ""]
+                            self.arrData.append(dict)
+                        }
                     }
                 }
+                SVProgressHUD.dismiss()
                 self.tbleVwShowData.reloadData()
             }
         })

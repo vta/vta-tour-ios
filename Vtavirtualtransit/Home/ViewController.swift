@@ -70,6 +70,9 @@ class ViewController: UIViewController , UITextFieldDelegate, CLLocationManagerD
     var arrNearMeStops: [Stops]!
     var queryHandle: FirebaseHandle!
     var circleQuery: GFQuery! = nil
+    var locationUpdateTimer = Timer()
+    var updateSeconds = 20
+    var isTimerRunning = false
     
     // SELECT COLOR VIEW ROUTES PROPERTY
     lazy var dropDowns: [DropDown] = {  // DROP DOWN ARRAY
@@ -117,6 +120,10 @@ class ViewController: UIViewController , UITextFieldDelegate, CLLocationManagerD
         
         self.navigationController?.navigationBar.isHidden = true
         self.navigationController?.navigationBar.isTranslucent = true
+        
+        if isNearBy {
+            runTimer_ForUpdateLocation()
+        }
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?)
@@ -244,6 +251,8 @@ class ViewController: UIViewController , UITextFieldDelegate, CLLocationManagerD
     {
         if isNearBy {
             if !(txtNearByRoutes.text?.isEmpty)! && !(txtNearByDirection.text?.isEmpty)! {
+              
+                locationUpdateTimer.invalidate()
                 
                 if locationManager.location?.coordinate.latitude == nil {
                     
@@ -263,6 +272,21 @@ class ViewController: UIViewController , UITextFieldDelegate, CLLocationManagerD
                 SVProgressHUD.show()
                 self.getVideoGeoPoints()
             }
+        }
+    }
+    
+    func runTimer_ForUpdateLocation() {
+        locationUpdateTimer.invalidate()
+        locationUpdateTimer = Timer.scheduledTimer(timeInterval: TimeInterval(updateSeconds), target: self,   selector: (#selector(ViewController.updateNearMeLocation)), userInfo: nil, repeats: true)
+    }
+    
+    @objc func updateNearMeLocation() {
+        print("Location UpDate......")
+        
+        if CLLocationManager.locationServicesEnabled() {
+            locationManager.delegate = self
+            locationManager.desiredAccuracy = kCLLocationAccuracyBest // You can change the locaiton accuary here.
+            locationManager.startUpdatingLocation()
         }
     }
     
@@ -311,6 +335,7 @@ class ViewController: UIViewController , UITextFieldDelegate, CLLocationManagerD
         if (queryHandle != nil && circleQuery != nil) {
             circleQuery.removeAllObservers()
         }
+        locationUpdateTimer.invalidate()
         self.getRoutesDetailFromFireBase(isUserLocation: false)
     }
     
@@ -631,6 +656,7 @@ class ViewController: UIViewController , UITextFieldDelegate, CLLocationManagerD
             circleQuery.observeReady
                 {
                     SVProgressHUD.dismiss()
+                    self.runTimer_ForUpdateLocation()
                     print("Observe Ready....\(arrNearMeStops)")
                     self.circleQuery.removeObserver(withFirebaseHandle: self.queryHandle)
                     
@@ -774,6 +800,9 @@ class ViewController: UIViewController , UITextFieldDelegate, CLLocationManagerD
         txtRoutes.text = ""
         txtDirection.text = ""
         txtDestination.text = ""
+        
+        txtNearByRoutes.text = ""
+        txtNearByDirection.text = ""
         
         departureIndex = -1
         destinationIndex = -1
