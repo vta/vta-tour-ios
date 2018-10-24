@@ -13,7 +13,7 @@ class GlobalUtil: NSObject {
     /** 计算文本尺寸 */
     static func textSizeWithString(_ str: String, font: UIFont, maxSize:CGSize) -> CGSize {
         let dict = [kCTFontAttributeName: font]
-        let size = (str as NSString).boundingRect(with: maxSize, options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: dict as [NSAttributedStringKey : Any], context: nil).size
+        let size = (str as NSString).boundingRect(with: maxSize, options: NSStringDrawingOptions.usesLineFragmentOrigin, attributes: dict as [NSAttributedString.Key : Any], context: nil).size
         return size
     }
     

@@ -30,7 +30,7 @@ class ShowNearMeInterestVC: UIViewController, UITableViewDataSource, UITableView
         ref = Database.database().reference()
         
         // Do any additional setup after loading the view.
-        tbleVwShowData.rowHeight = UITableViewAutomaticDimension
+        tbleVwShowData.rowHeight = UITableView.automaticDimension
         tbleVwShowData.estimatedRowHeight = 100
         
         self.title = type
@@ -41,7 +41,7 @@ class ShowNearMeInterestVC: UIViewController, UITableViewDataSource, UITableView
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        NotificationCenter.default.addObserver(forName: .UIContentSizeCategoryDidChange, object: .none, queue: OperationQueue.main) { [weak self] _ in
+        NotificationCenter.default.addObserver(forName: UIContentSizeCategory.didChangeNotification, object: .none, queue: OperationQueue.main) { [weak self] _ in
             self?.tbleVwShowData.reloadData()
         }
     }
@@ -181,7 +181,7 @@ class ShowNearMeInterestVC: UIViewController, UITableViewDataSource, UITableView
             if type == "Social Gathering" {
                 let dictDetails = arrData[indexPath.row] as NSDictionary
                 if let meetupURL = dictDetails.value(forKey: "meetupURL") {
-                    UIApplication.shared.open(URL(string : meetupURL as! String)!, options: [:], completionHandler: { (status) in
+                    UIApplication.shared.open(URL(string : meetupURL as! String)!, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: { (status) in
                     })
                 }
             }
@@ -190,7 +190,7 @@ class ShowNearMeInterestVC: UIViewController, UITableViewDataSource, UITableView
                 let dictDetails = arrData[indexPath.row] as NSDictionary
                 if let connection = dictDetails.value(forKey: "web_link") {
                     
-                    UIApplication.shared.open(URL(string : connection as! String)!, options: [:], completionHandler: { (status) in
+                    UIApplication.shared.open(URL(string : connection as! String)!, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: { (status) in
                     })
                 }
             }
@@ -202,7 +202,7 @@ class ShowNearMeInterestVC: UIViewController, UITableViewDataSource, UITableView
                 if let connection = dictDetails.value(forKey: "title") {
                     
                     let connectionURL = "http://www.vta.org/routes/rt\(connection)"
-                    UIApplication.shared.open(URL(string : connectionURL)!, options: [:], completionHandler: { (status) in
+                    UIApplication.shared.open(URL(string : connectionURL)!, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: { (status) in
                     })
                 }
             }
@@ -408,9 +408,9 @@ class ShowNearMeInterestVC: UIViewController, UITableViewDataSource, UITableView
         
         Alamofire.request(strURL,method: .get, parameters: nil, encoding: URLEncoding.default, headers:nil) .responseJSON { response in
             
-            let header = (response.response?.allHeaderFields)! as NSDictionary
+            _ = (response.response?.allHeaderFields)! as NSDictionary
             
-            print(response.request)
+            print(response.request!)
             print(response)
             
             if let json = response.result.value
@@ -437,4 +437,9 @@ class ShowNearMeInterestVC: UIViewController, UITableViewDataSource, UITableView
             }
         }
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToUIApplicationOpenExternalURLOptionsKeyDictionary(_ input: [String: Any]) -> [UIApplication.OpenExternalURLOptionsKey: Any] {
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (UIApplication.OpenExternalURLOptionsKey(rawValue: key), value)})
 }

@@ -7,34 +7,34 @@
 	<key>AD_UNIT_ID_FOR_INTERSTITIAL_TEST</key>
 	<string>ca-app-pub-3940256099942544/4411468910</string>
 	<key>CLIENT_ID</key>
-	<string>141415834682-g2oej5c2286gfhhj1ilmfqkf05m07kgd.apps.googleusercontent.com</string>
+	<string>640024747782-hl97cpvbucbkan2c9kko9khs8mjj81hc.apps.googleusercontent.com</string>
 	<key>REVERSED_CLIENT_ID</key>
-	<string>com.googleusercontent.apps.141415834682-g2oej5c2286gfhhj1ilmfqkf05m07kgd</string>
+	<string>com.googleusercontent.apps.640024747782-hl97cpvbucbkan2c9kko9khs8mjj81hc</string>
 	<key>API_KEY</key>
-	<string>AIzaSyDGh_tS06nHzUf946rQ8iiokmbjtvcH8_0</string>
+	<string>AIzaSyDCZ1UrzbFr3w8kkBRpVJNgckypm6OnSXw</string>
 	<key>GCM_SENDER_ID</key>
-	<string>141415834682</string>
+	<string>640024747782</string>
 	<key>PLIST_VERSION</key>
 	<string>1</string>
 	<key>BUNDLE_ID</key>
-	<string>com.vta.virtualtour</string>
+	<string>com.vta.virtualtransit</string>
 	<key>PROJECT_ID</key>
-	<string>vtavirtualtransit-7c904</string>
+	<string>virtual-tour-73267</string>
 	<key>STORAGE_BUCKET</key>
-	<string>vtavirtualtransit-7c904.appspot.com</string>
+	<string>virtual-tour-73267.appspot.com</string>
 	<key>IS_ADS_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_ANALYTICS_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_APPINVITE_ENABLED</key>
-	<false/>
+	<false></false>
 	<key>IS_GCM_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>IS_SIGNIN_ENABLED</key>
-	<true/>
+	<true></true>
 	<key>GOOGLE_APP_ID</key>
-	<string>1:141415834682:ios:dac7922ad5a86732</string>
+	<string>1:640024747782:ios:dfdca1c4191e3dad</string>
 	<key>DATABASE_URL</key>
-	<string>https://vtavirtualtransit-7c904.firebaseio.com</string>
+	<string>https://virtual-tour-73267.firebaseio.com</string>
 </dict>
 </plist>

@@ -62,7 +62,7 @@ class ShowNearMeVC: UIViewController, UITableViewDelegate, UITableViewDataSource
         
         ref = Database.database().reference()
         
-        tableVwAnimities.rowHeight = UITableViewAutomaticDimension
+        tableVwAnimities.rowHeight = UITableView.automaticDimension
         tableVwAnimities.estimatedRowHeight = 500
         
         // Do any additional setup after loading the view.
@@ -156,7 +156,7 @@ class ShowNearMeVC: UIViewController, UITableViewDelegate, UITableViewDataSource
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        NotificationCenter.default.addObserver(forName: .UIContentSizeCategoryDidChange, object: .none, queue: OperationQueue.main) { [weak self] _ in
+        NotificationCenter.default.addObserver(forName: UIContentSizeCategory.didChangeNotification, object: .none, queue: OperationQueue.main) { [weak self] _ in
             self?.tableVwAnimities.reloadData()
         }
     }

@@ -10,24 +10,20 @@ import UIKit
 import GoogleMaps
 import Alamofire
 
-class NavigationVC: UIViewController, GMSMapViewDelegate {
-    
-    var navigationRouteName: String! = nil
-    
+class NavigationVC: UIViewController, GMSMapViewDelegate
+{
     @IBOutlet var lblRouteName : UILabel!
     @IBOutlet var txtDirection: UITextView!
+    @IBOutlet weak var routeMapView: GMSMapView!
     
+    var navigationRouteName: String! = nil
     var departureStops: Stops! = nil
     var destinationStops: Stops! = nil
-    
-    @IBOutlet weak var routeMapView: GMSMapView!
     var stopsMarker: GMSMarker?
     var carMarker: GMSMarker?
-    
     var videoGeoPointsArr = [VideoGeoPoints]()
     var videoGeoCoordinatesArr = [CLLocation]()
     var routeRangeStopsArr = [Stops]()
-    
     var directionIndex: Int! = 0
     var directionAttStr = NSMutableAttributedString()
     
@@ -259,7 +255,7 @@ class NavigationVC: UIViewController, GMSMapViewDelegate {
                         // ADD STOPS NAME
                         let stopsName = startStops.name! + " - " + endStops.name! + "\n\n"
                         
-                        let stopsAttributes = [ NSAttributedStringKey.font: UIFont.systemFont(ofSize: 15.0, weight: .regular) ]
+                        let stopsAttributes = [ NSAttributedString.Key.font: UIFont.systemFont(ofSize: 15.0, weight: .regular) ]
                         let att = NSAttributedString(string: stopsName, attributes: stopsAttributes)
 
                         self.directionAttStr.append(att)

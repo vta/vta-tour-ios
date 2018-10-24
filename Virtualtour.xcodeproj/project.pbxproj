@@ -389,7 +389,7 @@
 				TargetAttributes = {
 					6AF8676D209E0C3700677F3E = {
 						CreatedOnToolsVersion = 9.3;
-						LastSwiftMigration = 0930;
+						LastSwiftMigration = 1000;
 					};
 				};
 			};
@@ -703,19 +703,20 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = 92PULKSVNN;
+				DEVELOPMENT_TEAM = 2632RWZJ55;
 				INFOPLIST_FILE = Vtavirtualtransit/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.vta.virtualtour;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vta.virtualtransit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "70cba447-fa0c-49ca-91b3-6b8dc7236d49";
-				PROVISIONING_PROFILE_SPECIFIER = "VTA@@@NEW";
+				PROVISIONING_PROFILE_SPECIFIER = "Test App Dev";
 				SWIFT_OBJC_BRIDGING_HEADER = "Vtavirtualtransit/Virtualtour-Bridging-Header.h";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -728,18 +729,19 @@
 				CLANG_ENABLE_MODULES = YES;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				CODE_SIGN_STYLE = Manual;
-				DEVELOPMENT_TEAM = 92PULKSVNN;
+				DEVELOPMENT_TEAM = 2632RWZJ55;
 				INFOPLIST_FILE = Vtavirtualtransit/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = com.vta.virtualtour;
+				PRODUCT_BUNDLE_IDENTIFIER = com.vta.virtualtransit;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "70cba447-fa0c-49ca-91b3-6b8dc7236d49";
-				PROVISIONING_PROFILE_SPECIFIER = "VTA@@@NEW";
+				PROVISIONING_PROFILE_SPECIFIER = "Test App Dev";
 				SWIFT_OBJC_BRIDGING_HEADER = "Vtavirtualtransit/Virtualtour-Bridging-Header.h";
-				SWIFT_VERSION = 4.0;
+				SWIFT_VERSION = 4.2;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Release;

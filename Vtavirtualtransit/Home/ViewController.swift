@@ -313,9 +313,9 @@ class ViewController: UIViewController , UITextFieldDelegate, CLLocationManagerD
         }
         else
         {
-            if let url = URL(string: UIApplicationOpenSettingsURLString)
+            if let url = URL(string: UIApplication.openSettingsURLString)
             {
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+                UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
             }
         }
     }
@@ -631,7 +631,6 @@ class ViewController: UIViewController , UITextFieldDelegate, CLLocationManagerD
             DispatchQueue.main.async {
                 SVProgressHUD.show()
                 self.queryHandle = self.circleQuery.observe(.keyEntered, with: { (key: String!, location: CLLocation!, snapshot: DataSnapshot) in
-                    print("Key '\(key)' entered the search area and is at location '\(location)'")
                     if snapshot.childrenCount > 0 {
                         
                         guard let stopObj = snapshot.value as? [String:Any] else {
@@ -768,7 +767,7 @@ class ViewController: UIViewController , UITextFieldDelegate, CLLocationManagerD
     func textFieldDidEndEditing(_ textField: UITextField) {
     }
     
-    func textFieldDidEndEditing(_ textField: UITextField, reason: UITextFieldDidEndEditingReason) {
+    func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -844,16 +843,16 @@ class ViewController: UIViewController , UITextFieldDelegate, CLLocationManagerD
             
             if reachability.connection == .wifi {
                 print("Reachable via WiFi")
-                self.selectVideoURL = value.value(forKey: "videoUrl") as! NSString
+                self.selectVideoURL = value.value(forKey: "videoUrl") as? NSString
             } else {
                 print("Reachable via Cellular")
                 if let lowResURl = value.value(forKey: "videoUrlLowRes")
                 {
-                    self.selectVideoURL = lowResURl as! NSString
+                    self.selectVideoURL = lowResURl as? NSString
                 }
                 else
                 {
-                    self.selectVideoURL = value.value(forKey: "videoUrl") as! NSString
+                    self.selectVideoURL = value.value(forKey: "videoUrl") as? NSString
                 }
             }
             
@@ -1022,8 +1021,8 @@ class ViewController: UIViewController , UITextFieldDelegate, CLLocationManagerD
         alertController.addAction(cancelAction)
         
         let openAction = UIAlertAction(title: "Open Settings", style: .default) { (action) in
-            if let url = URL(string: UIApplicationOpenSettingsURLString) {
-                UIApplication.shared.open(url, options: [:], completionHandler: nil)
+            if let url = URL(string: UIApplication.openSettingsURLString) {
+                UIApplication.shared.open(url, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: nil)
             }
         }
         alertController.addAction(openAction)
@@ -1122,7 +1121,7 @@ extension ViewController: NetworkStatusListener {
                 let value = snapshot.value as! NSDictionary
                 //  print(value)
                 
-                self.selectVideoURL = value.value(forKey: "videoUrl") as! NSString
+                self.selectVideoURL = value.value(forKey: "videoUrl") as? NSString
             })
             
             
@@ -1150,14 +1149,19 @@ extension ViewController: NetworkStatusListener {
                 
                 if let lowResURl = value.value(forKey: "videoUrlLowRes")
                 {
-                    self.selectVideoURL = lowResURl as! NSString
+                    self.selectVideoURL = lowResURl as? NSString
                 }
                 else
                 {
-                    self.selectVideoURL = value.value(forKey: "videoUrl") as! NSString
+                    self.selectVideoURL = value.value(forKey: "videoUrl") as? NSString
                 }
             })
         }
     }
 }
 
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToUIApplicationOpenExternalURLOptionsKeyDictionary(_ input: [String: Any]) -> [UIApplication.OpenExternalURLOptionsKey: Any] {
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (UIApplication.OpenExternalURLOptionsKey(rawValue: key), value)})
+}

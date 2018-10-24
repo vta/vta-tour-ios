@@ -155,7 +155,7 @@ class PlayerView: UIView, UIGestureRecognizerDelegate {
         coverView.addSubview(toolBarView)
         
         // 菊花转
-        loadingView = UIActivityIndicatorView.init(activityIndicatorStyle: UIActivityIndicatorViewStyle.white)
+        loadingView = UIActivityIndicatorView.init(style: UIActivityIndicatorView.Style.white)
         loadingView.center = coverView.center
         self.addSubview(loadingView)
     }
@@ -173,8 +173,8 @@ class PlayerView: UIView, UIGestureRecognizerDelegate {
         
         backBtn = UIButton(frame:(CGRect(x: FIT_SCREEN_WIDTH(10), y: 20, width: FIT_SCREEN_WIDTH(0), height: FIT_SCREEN_WIDTH(0))))
         backBtn.y = (navigationHeight - backBtn.height) * 0.5
-        backBtn.setBackgroundImage(UIImage(named: "icon_video_return"), for: UIControlState())
-        backBtn.addTarget(self, action: #selector(backBtnDidClicked), for: UIControlEvents.touchUpInside)
+        backBtn.setBackgroundImage(UIImage(named: "icon_video_return"), for: UIControl.State())
+        backBtn.addTarget(self, action: #selector(backBtnDidClicked), for: UIControl.Event.touchUpInside)
         self.addSubview(backBtn)
     }
     
@@ -185,8 +185,8 @@ class PlayerView: UIView, UIGestureRecognizerDelegate {
         shareBtn.frame = CGRect(x: 0, y: 0, width: FIT_SCREEN_WIDTH(0), height: FIT_SCREEN_HEIGHT(0))
         shareBtn.right = navView.width - FIT_SCREEN_WIDTH(10)
         shareBtn.centerY = backBtn.centerY
-        shareBtn.setImage(UIImage(named: "icon_video_fenxiang"), for: UIControlState.normal)
-        shareBtn.addTarget(self, action: #selector(shareBtnClicked), for: UIControlEvents.touchUpInside)
+        shareBtn.setImage(UIImage(named: "icon_video_fenxiang"), for: UIControl.State.normal)
+        shareBtn.addTarget(self, action: #selector(shareBtnClicked), for: UIControl.Event.touchUpInside)
     }
     
     // 播放、暂停按钮
@@ -195,9 +195,9 @@ class PlayerView: UIView, UIGestureRecognizerDelegate {
         toolBarView.addSubview(startButton)
         startButton.frame = CGRect(x: Padding, y: 0, width: FIT_SCREEN_WIDTH(0), height: FIT_SCREEN_WIDTH(0))
         startButton.y = toolBarView.height/2.0 - startButton.height/2.0
-        startButton.setBackgroundImage(UIImage(named: "video_pauseBtn"), for: UIControlState.selected)
-        startButton.setBackgroundImage(UIImage(named: "video_playBtn"), for: UIControlState())
-        startButton.addTarget(self, action: #selector(startAction(_:)), for: UIControlEvents.touchUpInside)
+        startButton.setBackgroundImage(UIImage(named: "video_pauseBtn"), for: UIControl.State.selected)
+        startButton.setBackgroundImage(UIImage(named: "video_playBtn"), for: UIControl.State())
+        startButton.addTarget(self, action: #selector(startAction(_:)), for: UIControl.Event.touchUpInside)
     }
     
     // 亮度、声音滑动条
@@ -221,7 +221,7 @@ class PlayerView: UIView, UIGestureRecognizerDelegate {
         }
         systemSlider.isHidden = true
         systemSlider.autoresizesSubviews = false
-        systemSlider.autoresizingMask = UIViewAutoresizing()
+        systemSlider.autoresizingMask = UIView.AutoresizingMask()
         self.addSubview(systemSlider)
         
         //设置声音滑块
@@ -254,7 +254,7 @@ class PlayerView: UIView, UIGestureRecognizerDelegate {
         toolBarView.addSubview(progressSlider)
         var image = UIImage(named: "video_round") //红点
         image = image?.scaleImageToSize(size: CGSize(width: FIT_SCREEN_WIDTH(15), height: FIT_SCREEN_WIDTH(15)))
-        progressSlider.setThumbImage(image, for: UIControlState.normal)
+        progressSlider.setThumbImage(image, for: UIControl.State.normal)
         progressSlider.minimumValue = 0
         progressSlider.maximumValue = 1 // 总共时长
         progressSlider.minimumTrackTintColor = PlayFinishColor
@@ -309,11 +309,11 @@ class PlayerView: UIView, UIGestureRecognizerDelegate {
         maxButton.right = toolBarView.right - Padding
         maxButton.y = toolBarView.height/2 - maxButton.height/2
         if isFullScreen == true {
-            maxButton.setBackgroundImage(UIImage(named: "video_minBtn"), for: UIControlState())
+            maxButton.setBackgroundImage(UIImage(named: "video_minBtn"), for: UIControl.State())
         } else {
-            maxButton.setBackgroundImage(UIImage(named: "video_maxBtn"), for: UIControlState())
+            maxButton.setBackgroundImage(UIImage(named: "video_maxBtn"), for: UIControl.State())
         }
-        maxButton.addTarget(self, action: #selector(maxBtnClicked), for: UIControlEvents.touchUpInside)
+        maxButton.addTarget(self, action: #selector(maxBtnClicked), for: UIControl.Event.touchUpInside)
         self.addSubview(maxButton)
     }
     
@@ -358,7 +358,7 @@ extension PlayerView {
     // 屏幕滑动手势
     @objc func viewPanGes(pan: UIPanGestureRecognizer) {
         
-        if pan.state == UIGestureRecognizerState.began { // 开始拖动
+        if pan.state == UIGestureRecognizer.State.began { // 开始拖动
             
             isDragging = true // 标记开始拖动
             pauseVideo() // 暂停播放
@@ -371,19 +371,19 @@ extension PlayerView {
             firstPoint = pan.location(in: self)
             volumeSlider.value = systemSlider.value
             
-        } else if pan.state == UIGestureRecognizerState.ended { // 结束拖动
+        } else if pan.state == UIGestureRecognizer.State.ended { // 结束拖动
             
             isDragging = false // 标记拖动完成
             startToolBarTimer() // 开启工具条定时器
             playVideo() // 继续播放
             
-        } else if pan.state == UIGestureRecognizerState.changed { // 正在拖动
+        } else if pan.state == UIGestureRecognizer.State.changed { // 正在拖动
             
             secondPoint = pan.location(in: self)
             
             // 判断是左右滑动还是上下滑动
-            let horValue = fabs(firstPoint.x - secondPoint.x) // 水平方向
-            let verValue = fabs(firstPoint.y - secondPoint.y) // 竖直方向
+            let horValue = abs(firstPoint.x - secondPoint.x) // 水平方向
+            let verValue = abs(firstPoint.y - secondPoint.y) // 竖直方向
             
             // 确定本次手势操作是水平滑动还是竖直滑动，避免一次手势操作中出现水平和竖直先后都出现的情况
             // 比如先向右滑动30，然后继续向上滑动50，就会出现一次手势操作中先调节视频进度又调节了音量
@@ -431,7 +431,7 @@ extension PlayerView {
     // 滑条正在拖动
     @objc func sliderIsDraging(slider: UISlider) {
         
-        if player.status == AVPlayerStatus.readyToPlay {
+        if player.status == AVPlayer.Status.readyToPlay {
             // 改变视频进度
             changeVideoProgress(changeType: .sliderPan)
         }
@@ -549,13 +549,13 @@ extension PlayerView {
         if isDragging == false { // 当没有正在拖动进度时，才刷新时间和进度条
             let currentTime = CMTimeGetSeconds(currentT)
             // 显示时间
-            refreshTimeLabelValue(CMTimeMake(Int64(currentTime), 1))
+            refreshTimeLabelValue(CMTimeMake(value: Int64(currentTime), timescale: 1))
             progressSlider.value = Float(TimeInterval(currentTime) / (TimeInterval(durationT) / TimeInterval(timescaleT)))
             prevCrntTime = Double(progressSlider.value)
             print("Progess slider .....\(progressSlider.value)")
         }
         // 开始播放停止转子
-        if (player.status == AVPlayerStatus.readyToPlay) {
+        if (player.status == AVPlayer.Status.readyToPlay) {
             stopLoadingAnimation()
         } else {
             startLoadingAnimation()
@@ -572,7 +572,7 @@ extension PlayerView {
             return
         }
         let timeSecond = CMTimeGetSeconds(currentTime)
-        let totalTimeStr = refreshTimeLabelValue(CMTimeMake(Int64(timeSecond), 1))
+        let totalTimeStr = refreshTimeLabelValue(CMTimeMake(value: Int64(timeSecond), timescale: 1))
         
         let contantSize = CGSize(width: SCREEN_WIDTH, height: SCREEN_HEIGHT)
         //左侧时间宽度
@@ -667,7 +667,7 @@ extension PlayerView {
         let total = Float64(durationT) / Float64(timescaleT)
         //计算出拖动的当前秒数
         let dragedSeconds = floorf(Float(total * Float64(progressSlider.value)))
-        let dragedCMTime = CMTimeMake(Int64(dragedSeconds), 1)
+        let dragedCMTime = CMTimeMake(value: Int64(dragedSeconds), timescale: 1)
         // 刷新时间
         refreshTimeLabelValue(dragedCMTime)
         // 刷新进度
@@ -726,7 +726,7 @@ extension PlayerView {
         // 定位精度较差，但是性能比较高
         //        player.seek(to: CMTimeMakeWithSeconds(Float64(time), 1))
         // 定位最为精确，但是性能很差
-        player.seek(to: CMTimeMakeWithSeconds(Float64(time), 1), toleranceBefore: kCMTimeZero, toleranceAfter: kCMTimeZero)
+        player.seek(to: CMTimeMakeWithSeconds(Float64(time), preferredTimescale: 1), toleranceBefore: CMTime.zero, toleranceAfter: CMTime.zero)
     }
     
     // 无效的播放路径

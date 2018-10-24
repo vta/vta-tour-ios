@@ -58,16 +58,16 @@ class PlayerManager: NSObject, PlayerViewDelegate {
         playerView.delegate = self
         
         //计时器，循环执行(在视频暂停以及进入后台时会自动停止，恢复后自动开始)
-        playbackTimeObserver = playerView.player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(1.0, Int32(NSEC_PER_SEC)), queue: DispatchQueue.main) { [weak self] (time) in
+        playbackTimeObserver = playerView.player.addPeriodicTimeObserver(forInterval: CMTimeMakeWithSeconds(1.0, preferredTimescale: Int32(NSEC_PER_SEC)), queue: DispatchQueue.main) { [weak self] (time) in
             self?.refreshTimeObserve()
             } as? NSObject
         
         // 进入后台通知
-        NotificationCenter.default.addObserver(self, selector: #selector(appDidEnterBackground(_:)), name: NSNotification.Name.UIApplicationDidEnterBackground, object: nil)
+        NotificationCenter.default.addObserver(self, selector: #selector(appDidEnterBackground(_:)), name: UIApplication.didEnterBackgroundNotification, object: nil)
         // 播放完成通知
         NotificationCenter.default.addObserver(self, selector: #selector(moviePlayDidEnd(_:)), name: NSNotification.Name.AVPlayerItemDidPlayToEndTime, object: nil)
         // 注册屏幕旋转通知
-        NotificationCenter.default.addObserver(self, selector: #selector(statusBarOrientationChange(_:)), name: NSNotification.Name.UIDeviceOrientationDidChange, object: UIDevice.current)
+        NotificationCenter.default.addObserver(self, selector: #selector(statusBarOrientationChange(_:)), name: UIDevice.orientationDidChangeNotification, object: UIDevice.current)
     }
     
     // 初始化播放地址
@@ -75,7 +75,7 @@ class PlayerManager: NSObject, PlayerViewDelegate {
         
         //视频音频设置
         do {
-            _ = try AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, with: AVAudioSessionCategoryOptions.mixWithOthers)
+            _ = try AVAudioSession.sharedInstance().setCategory(.playback, mode: AVAudioSession.Mode.default, options: AVAudioSession.CategoryOptions.mixWithOthers)
         } catch {
             print("音视频设置捕获异常！！！！！！！")
         }
@@ -225,15 +225,15 @@ extension PlayerManager {
             playerView.setProgressValue()
             
         } else if context == &statusContext {
-            if playerView.player.status == AVPlayerStatus.readyToPlay {
+            if playerView.player.status == AVPlayer.Status.readyToPlay {
                 // 根据时间重新调整时间frame值
              //   playerView.resizeTimeLabel()
                 playerView.stopLoadingAnimation()
                 
-            } else if playerView.player.status == AVPlayerStatus.unknown {
+            } else if playerView.player.status == AVPlayer.Status.unknown {
                 playerView.startLoadingAnimation()
                 
-            } else if playerView.player.status == AVPlayerStatus.failed {
+            } else if playerView.player.status == AVPlayer.Status.failed {
                 playerView.stopLoadingAnimation()
             }
         }
@@ -284,4 +284,9 @@ extension PlayerManager {
 //        
 //        print("Current TIme ---11111  =\(playerView.currentTime)")
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertFromAVAudioSessionCategory(_ input: AVAudioSession.Category) -> String {
+	return input.rawValue
 }

@@ -141,7 +141,7 @@ class ViewPOIsDetails: UIViewController, GMSMapViewDelegate
     @IBAction func btnWebsite(_sender: UIButton)
     {
         if let webURL = lblWebsite.text {
-            UIApplication.shared.open(URL(string : webURL)!, options: [:], completionHandler: { (status) in
+            UIApplication.shared.open(URL(string : webURL)!, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: { (status) in
             })
         }
     }
@@ -216,4 +216,9 @@ class ViewPOIsDetails: UIViewController, GMSMapViewDelegate
      }
      */
     
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToUIApplicationOpenExternalURLOptionsKeyDictionary(_ input: [String: Any]) -> [UIApplication.OpenExternalURLOptionsKey: Any] {
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (UIApplication.OpenExternalURLOptionsKey(rawValue: key), value)})
 }

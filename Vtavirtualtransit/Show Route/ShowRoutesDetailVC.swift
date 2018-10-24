@@ -327,7 +327,7 @@ class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDele
         if marker.accessibilityValue == "meetup" {
             
             if let meetupURL = marker.userData {
-                UIApplication.shared.open(URL(string : meetupURL as! String)!, options: [:], completionHandler: { (status) in
+                UIApplication.shared.open(URL(string : meetupURL as! String)!, options: convertToUIApplicationOpenExternalURLOptionsKeyDictionary([:]), completionHandler: { (status) in
                 })
             }
         }
@@ -678,22 +678,22 @@ class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDele
                     print("Reachable via WiFi")
                     if let lowResURl = self?.directionVideoURLArr[index].value(forKey:"low_res_url")
                     {
-                        self?.videoPlayURL = lowResURl as! NSString
+                        self?.videoPlayURL = lowResURl as? NSString
                     }
                     else
                     {
-                        self?.videoPlayURL = self?.directionVideoURLArr[index].value(forKey:"high_res_url") as! NSString
+                        self?.videoPlayURL = self?.directionVideoURLArr[index].value(forKey:"high_res_url") as? NSString
                     }
                     
                 } else {
                     print("Reachable via Cellular")
                     if let lowResURl = self?.directionVideoURLArr[index].value(forKey:"low_res_url")
                     {
-                        self?.videoPlayURL = lowResURl as! NSString
+                        self?.videoPlayURL = lowResURl as? NSString
                     }
                     else
                     {
-                        self?.videoPlayURL = self?.directionVideoURLArr[index].value(forKey:"high_res_url") as! NSString
+                        self?.videoPlayURL = self?.directionVideoURLArr[index].value(forKey:"high_res_url") as? NSString
                     }
                 }
                 
@@ -874,8 +874,6 @@ class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDele
         playerManager.delegate = self
         playerManager.playUrlStr = videoPlayURL! as String
         playerManager.seekToTime(Int(playerManager.playerView.startTimeValue))//Jump to the Nth progress position, starting from scratch is 0
-        
-        print("Play Video URL ===\(videoPlayURL)")
     }
     
     // MARK: SET UP GOOGLE MAP ACCORDING USER SELECT ROUTE
@@ -970,8 +968,6 @@ class ShowRoutesDetailVC: UIViewController,GMSMapViewDelegate, PlayerManagerDele
             
             let lat:String = String(format:"%f", poiGeoPoint.lat!)
             let lng: String = String(format:"%f",poiGeoPoint.lng!)
-            let latLngStr = lat + "," + lng
-            
             
             // self.getPOIs(latLong: latLngStr, type: "bank")
             self.getMeetUps(lat: lat, lon: lng)
@@ -1381,4 +1377,9 @@ extension ShowRoutesDetailVC: NetworkStatusListener {
             debugPrint("ViewController: Network reachable through Cellular Data")
         }
     }
+}
+
+// Helper function inserted by Swift 4.2 migrator.
+fileprivate func convertToUIApplicationOpenExternalURLOptionsKeyDictionary(_ input: [String: Any]) -> [UIApplication.OpenExternalURLOptionsKey: Any] {
+	return Dictionary(uniqueKeysWithValues: input.map { key, value in (UIApplication.OpenExternalURLOptionsKey(rawValue: key), value)})
 }

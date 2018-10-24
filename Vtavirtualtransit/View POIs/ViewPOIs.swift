@@ -50,7 +50,7 @@ class ViewPOIs: UIViewController, UITableViewDataSource, UITableViewDelegate, UI
         arrPOI_Type = arrPOI_Type.map({ $0.replacingOccurrences(of: "_", with: " ").capitalized})
         
         
-        tablePOIs.rowHeight = UITableViewAutomaticDimension
+        tablePOIs.rowHeight = UITableView.automaticDimension
         tablePOIs.estimatedRowHeight = 100
         
 //        strType = "bank"
@@ -187,7 +187,7 @@ class ViewPOIs: UIViewController, UITableViewDataSource, UITableViewDelegate, UI
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        NotificationCenter.default.addObserver(forName: .UIContentSizeCategoryDidChange, object: .none, queue: OperationQueue.main) { [weak self] _ in
+        NotificationCenter.default.addObserver(forName: UIContentSizeCategory.didChangeNotification, object: .none, queue: OperationQueue.main) { [weak self] _ in
             self?.tablePOIs.reloadData()
         }
     }
@@ -325,7 +325,7 @@ class ViewPOIs: UIViewController, UITableViewDataSource, UITableViewDelegate, UI
     func textFieldDidEndEditing(_ textField: UITextField) {
     }
     
-    func textFieldDidEndEditing(_ textField: UITextField, reason: UITextFieldDidEndEditingReason) {
+    func textFieldDidEndEditing(_ textField: UITextField, reason: UITextField.DidEndEditingReason) {
     }
     
     func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {

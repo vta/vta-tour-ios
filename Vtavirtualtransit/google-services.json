@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "640024747782",
+    "firebase_url": "https://virtual-tour-73267.firebaseio.com",
+    "project_id": "virtual-tour-73267",
+    "storage_bucket": "virtual-tour-73267.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:640024747782:android:dfdca1c4191e3dad",
+        "android_client_info": {
+          "package_name": "com.vta.virtualtransit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "640024747782-qvtr16qki6dqkrtnuam9okrha5p2kslg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCGXmRy4JYElk2_xDYSjPCiFPcj_brWDzA"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
